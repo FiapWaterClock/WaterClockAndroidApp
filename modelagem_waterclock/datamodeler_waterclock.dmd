@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="datamodeler_waterclock" id="D2E31CEA-5DC6-AD7A-3A5C-90F088B3B40A" version="3.5">
+<createdBy>logonrmlocal</createdBy>
+<createdTime>2019-05-23 13:13:32 UTC</createdTime>
+<ownerDesignName>datamodeler_waterclock</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>D2E31CEA-5DC6-AD7A-3A5C-90F088B3B40A</designId>
+</OSDM_Design>
