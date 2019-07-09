@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayoutHome"
@@ -8,7 +8,7 @@
     android:background="@color/colorBackground"
     tools:context=".MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutValueMensal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Valor"
-            android:textColor="@color/white"
+            android:textColor="@color/colorWhite"
             android:textSize="24sp"
             app:layout_constraintEnd_toStartOf="@+id/textViewVolumeTextMonth"
             app:layout_constraintHorizontal_bias="0.5"
@@ -57,7 +57,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Volume"
-            android:textColor="@color/white"
+            android:textColor="@color/colorWhite"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -91,7 +91,7 @@
             app:layout_constraintEnd_toEndOf="@+id/textViewVolumeTextMonth"
             app:layout_constraintStart_toStartOf="@+id/textViewVolumeTextMonth"
             app:layout_constraintTop_toBottomOf="@+id/textViewVolumeTextMonth" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/textViewWaterClock"
@@ -100,7 +100,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/water_clock"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/colorWhite"
         android:textSize="56sp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayoutValueDiario"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutValueDiario"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Valor"
-            android:textColor="@color/white"
+            android:textColor="@color/colorWhite"
             android:textSize="24sp"
             app:layout_constraintEnd_toStartOf="@+id/textViewVolumeTextDay"
             app:layout_constraintHorizontal_bias="0.5"
@@ -143,7 +143,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Volume"
-            android:textColor="@color/white"
+            android:textColor="@color/colorWhite"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -189,12 +189,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationViewHome"
         android:layout_width="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorWhite"
         app:menu="@menu/menu_bottom_navigation"
         android:layout_height="86dp"
         app:labelVisibilityMode="unlabeled"
@@ -202,4 +202,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
