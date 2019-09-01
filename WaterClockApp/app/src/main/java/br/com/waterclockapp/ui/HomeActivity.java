@@ -20,6 +20,8 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     private BottomNavigationView navigationView;
     private HomeContract.Presenter presenter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
