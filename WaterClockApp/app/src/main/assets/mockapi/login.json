@@ -1,7 +1,7 @@
 {
+  "access_token": "DrdHZtH-ilLpZSpQVeKRRSTdn7AZCjW-ySgdmkwIUKOh4hvy1w65FQnVLN6mBG5JqTk96Gsf0ID3p3alRf4X67pn5fC3aMYJ8IBTnRFzk3EDsLaIbT2WlcIGFNl1xswOlWAxB5pDSG2EDZ_TDyaGBVxeNGWilCooUdX5nljBmZMYLeOETCIJmFsn-GmS5PXAutGEOFkChPE4XYQBFF1Vk_D00Hjc7DwLpQ2PRl91wZrJo-D-cjJQVCoVDTl3SZAa4tmQQgf3PFBj1j75y-tpVA",
+  "token_type": "bearer",
   "userId": 1,
   "name": "Jose da Silva Teste",
-  "bankAccount": "2050",
-  "agency": "012314564",
-  "balance": 3.3445
+  "isAdmin": "true"
 }

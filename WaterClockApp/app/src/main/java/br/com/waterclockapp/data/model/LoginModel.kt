@@ -10,5 +10,5 @@ data class LoginModel(
         val userId: Int
 ){
     fun toDomain(username:String, password:String): User =
-            User(username, password, agency, balance, bankAccount, name, userId)
+            User(username, password, name, userId)
 }
