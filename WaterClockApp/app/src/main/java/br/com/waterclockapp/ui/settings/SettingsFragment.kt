@@ -26,7 +26,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        textViewNameSettings.setText(Preferences.getPreferences().name)
+        textViewNameSettings.text = Preferences.getPreferences()?.name
         buttonCleanCredencias.setOnClickListener { showDialogChooser() }
     }
 
@@ -34,7 +34,7 @@ class SettingsFragment : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.chooser_dialog)
         dialog.setCancelable(false)
-        dialog.findViewById<TextView>(R.id.textViewDialogQuestion).setText(DIALOG_MESSAGE_CLEAN_SETTINGS)
+        dialog.findViewById<TextView>(R.id.textViewDialogQuestion).text = DIALOG_MESSAGE_CLEAN_SETTINGS
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         dialog.show()
 

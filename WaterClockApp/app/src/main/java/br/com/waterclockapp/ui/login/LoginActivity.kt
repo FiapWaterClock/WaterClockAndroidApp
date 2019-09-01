@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.Toast
 import br.com.waterclockapp.R
 import br.com.waterclockapp.domain.User
-import br.com.waterclockapp.ui.MainActivity
+import br.com.waterclockapp.ui.HomeActivity
 import br.com.waterclockapp.util.Preferences
 import br.com.waterclockapp.util.USER_ACCOUNT
 import kotlinx.android.synthetic.main.activity_login.*
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     private fun goToHome(preferences: User?) {
         if(preferences != null){
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
             intent.putExtra(USER_ACCOUNT, preferences)
             startActivity(intent)
             finish()
