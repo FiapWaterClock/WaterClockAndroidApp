@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
 
-    var dialog: Dialog = Dialog(context, R.style.CustomAlertDialog)
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,6 +31,7 @@ class SettingsFragment : Fragment() {
     }
 
     fun showDialogChooser(){
+        val dialog: Dialog = Dialog(context, R.style.CustomAlertDialog)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.chooser_dialog)
         dialog.setCancelable(false)

@@ -2,26 +2,32 @@ package br.com.waterclockapp.ui.camera
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Camera
+import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.hardware.camera2.params.StreamConfigurationMap
+import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.HandlerThread
+import android.system.Os.close
 import android.util.Size
 import android.util.SparseIntArray
 import android.view.*
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.com.waterclockapp.R
 import br.com.waterclockapp.ui.HomeActivity
-import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
-import java.util.*
-import java.util.jar.Manifest
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.nio.ByteBuffer
 
 class CameraFragment : Fragment() {
 
@@ -43,16 +49,19 @@ class CameraFragment : Fragment() {
     private lateinit var size: Size
     private lateinit var imageReader: ImageReader
     private lateinit var file: File
-    lateinit var backgroundHandler: Handler
-    lateinit var backgroundThread: HandlerThread
+    var backgroundHandler: Handler? = null
+    var backgroundThread: HandlerThread? = null
 
-
-
+    private lateinit var textureViewCamera : TextureView
+    private lateinit var buttonSavaCamera : Button
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_camera, container, false)
+        textureViewCamera = view.findViewById(R.id.textureViewCamera)
+        buttonSavaCamera = view.findViewById(R.id.buttonSavaCamera)
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
@@ -159,12 +168,127 @@ class CameraFragment : Fragment() {
     }
 
     private fun takePicture() {
+        if(cameraDevice == null)
+            return
+        val cameraManager: CameraManager = activity?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val characteristics = cameraManager.getCameraCharacteristics(cameraDevice?.id)
+        val jpegSizes : Array<Size>? =
+            characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG)
 
+        var width = 640
+        var height = 480
+        if(jpegSizes != null && jpegSizes.size > 0){
+            width = jpegSizes[0].width
+            height = jpegSizes[0].height
+        }
+
+        val imageReader: ImageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
+        val outputSurface = ArrayList<Surface>(2)
+        outputSurface.add(imageReader.surface)
+        outputSurface.add(Surface(textureViewCamera.surfaceTexture))
+        val captureBuilder : CaptureRequest.Builder? = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+        captureBuilder?.addTarget(imageReader.surface)
+        captureBuilder?.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+
+        val rotation = activity?.windowManager?.defaultDisplay?.rotation
+        captureBuilder?.set(CaptureRequest.JPEG_ORIENTATION, rotation?.let { ORIENTATIONS.get(it) })
+        val tsLong : Long = System.currentTimeMillis()/ 1000
+        val ts : String = tsLong.toString()
+
+        file = File("${Environment.getExternalStorageDirectory()}/$ts.jpg")
+
+        val readerListener : ImageReader.OnImageAvailableListener = ImageReader.OnImageAvailableListener {
+            var image: Image = imageReader.acquireLatestImage()
+            val byteBuffer: ByteBuffer = image.planes[0].buffer
+            val bytes  = byteArrayOfInts(byteBuffer.capacity())
+            byteBuffer.get(bytes)
+            try {
+                save(bytes)
+            }catch (e: IOException){
+                e.printStackTrace()
+            }finally {
+                image?.let { it.close() }
+            }
+
+
+        }
+        imageReader.setOnImageAvailableListener(readerListener, backgroundHandler)
+
+        val captureListener : CameraCaptureSession.CaptureCallback = object : CameraCaptureSession.CaptureCallback() {
+            override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                super.onCaptureCompleted(session, request, result)
+                Toast.makeText(activity, "Saved", Toast.LENGTH_LONG).show()
+                try{
+                    createCameraPreview()
+                }catch (e:CameraAccessException){
+                    e.printStackTrace()
+                }
+            }
+        }
+        cameraDevice?.createCaptureSession(outputSurface, object: CameraCaptureSession.StateCallback(){
+            override fun onConfigureFailed(session: CameraCaptureSession) {
+                try {
+                    session.capture(captureRequestBuilder.build(), captureListener, backgroundHandler)
+
+                }catch (e: CameraAccessException){
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onConfigured(session: CameraCaptureSession) {
+
+            }
+
+        }, backgroundHandler)
 
     }
 
+    private fun save(bytes: ByteArray) {
+        val outputStream: OutputStream = FileOutputStream(file)
+        outputStream.write(bytes)
+        outputStream.close()
+    }
+
+    fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+
     override fun onResume() {
         super.onResume()
+        startBackgroundThread()
+        if(textureViewCamera.isAvailable){
+            openCamera()
+        }else {
+            textureViewCamera.surfaceTextureListener = textureListener
+        }
+
+    }
+
+    private fun startBackgroundThread() {
+        backgroundThread = HandlerThread("Camera Background")
+        backgroundThread?.start()
+        backgroundHandler = Handler(backgroundThread?.looper)
+    }
+
+    override fun onPause() {
+        stopBackgroundThread()
+        super.onPause()
+    }
+
+    protected fun stopBackgroundThread() {
+        if(backgroundThread != null){
+            backgroundThread?.quitSafely()
+            backgroundThread?.join()
+        }
+        backgroundThread = null
+        backgroundHandler = null
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == REQUESTCODECAMERA){
+            if(grantResults[0] == PackageManager.PERMISSION_DENIED){
+                Toast.makeText(activity, "Sorry, camera permission is necessary", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 }

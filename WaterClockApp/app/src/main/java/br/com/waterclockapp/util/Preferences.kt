@@ -7,6 +7,7 @@ import br.com.waterclockapp.domain.User
 object Preferences {
 
     private var shared: SharedPreferences? = null
+    private var remember: Rebember? = null
 
     operator fun invoke(context: Context): Preferences {
         val sharedPreference: SharedPreferences by lazy {
@@ -48,7 +49,17 @@ object Preferences {
         }
     }
 
+    fun saveSwitch(remember: Rebember){
+        this.remember = remember
+        shared?.let {
+            it.edit().putInt(REMEMBER, remember.ordinal).apply()
+        }
+        savedPreferences()
+    }
+
     fun getPreferences(): User? = if(isSave()) user else null
+
+    fun getPreferencesRemember(): Rebember? = remember
 
 
     fun isSave():Boolean {

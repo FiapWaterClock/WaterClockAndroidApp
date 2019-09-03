@@ -10,6 +10,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import br.com.waterclockapp.R;
 import br.com.waterclockapp.domain.User;
+import br.com.waterclockapp.util.Preferences;
+import br.com.waterclockapp.util.Rebember;
 
 import static br.com.waterclockapp.util.ConstantsKt.USER_ACCOUNT;
 
@@ -20,16 +22,13 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     private BottomNavigationView navigationView;
     private HomeContract.Presenter presenter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         loadUI();
 
-        loadExtras();
+
         navigationView.setOnNavigationItemSelectedListener(menuitem -> {
             presenter.itemClicked(menuitem);
             return true;
@@ -58,7 +57,10 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         }
     }
 
-    private void loadExtras() {
-        user = (User) getIntent().getParcelableExtra(USER_ACCOUNT);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(Preferences.INSTANCE.getPreferencesRemember().equals(Rebember.CLOSE))
+            Preferences.INSTANCE.clearPreferences();
     }
 }

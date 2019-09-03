@@ -8,6 +8,7 @@ const val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(
 const val USERNAME = "username"
 const val PASSWORD = "password"
 const val TOKEN = "token"
+const val REMEMBER = "remember"
 const val NAME_PREFS = "user_preferences"
 const val USERID = "user_id"
 const val NAME = "name"
