@@ -10,9 +10,9 @@ import android.view.View
 import android.widget.Toast
 import br.com.waterclockapp.R
 import br.com.waterclockapp.domain.User
-import br.com.waterclockapp.ui.MainActivity
+import br.com.waterclockapp.ui.HomeActivity
 import br.com.waterclockapp.util.Preferences
-import br.com.waterclockapp.util.USER_ACCOUNT
+import br.com.waterclockapp.util.Rebember
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
@@ -55,8 +55,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     private fun goToHome(preferences: User?) {
         if(preferences != null){
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.putExtra(USER_ACCOUNT, preferences)
+            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -68,7 +67,10 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     override fun saveUserPreferences(user: User) {
         if(switchLogin.isChecked)
-            Preferences.saveUser(user)
+            Preferences.saveSwitch(Rebember.OPEN)
+        else
+            Preferences.saveSwitch(Rebember.CLOSE)
+        Preferences.saveUser(user)
         goToHome(user)
 
     }

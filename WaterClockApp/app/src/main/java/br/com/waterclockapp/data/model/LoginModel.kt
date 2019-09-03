@@ -1,14 +1,14 @@
 package br.com.waterclockapp.data.model
 
 import br.com.waterclockapp.domain.User
+import com.google.gson.annotations.SerializedName
 
 data class LoginModel(
-        val agency: String,
-        val balance: Double,
-        val bankAccount: String,
         val name: String,
-        val userId: Int
+        val userId: Int,
+        @SerializedName("access_token")
+        val token: String
 ){
     fun toDomain(username:String, password:String): User =
-            User(username, password, agency, balance, bankAccount, name, userId)
+            User(username, password, name, userId, token)
 }

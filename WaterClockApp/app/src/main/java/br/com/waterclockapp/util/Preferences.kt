@@ -2,12 +2,12 @@ package br.com.waterclockapp.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.provider.Telephony.Carriers.PASSWORD
 import br.com.waterclockapp.domain.User
 
 object Preferences {
 
     private var shared: SharedPreferences? = null
+    private var remember: Rebember? = null
 
     operator fun invoke(context: Context): Preferences {
         val sharedPreference: SharedPreferences by lazy {
@@ -26,6 +26,9 @@ object Preferences {
             it.edit()
                 .putString(USERNAME, user.username)
                 .putString(PASSWORD, user.password)
+                .putString(NAME, user.name)
+                .putInt(USERID, user.userId!!)
+                .putString(TOKEN, user.token)
                 .apply()
         }
 
@@ -40,12 +43,23 @@ object Preferences {
             shared?.let{
                 user.username = it.getString(USERNAME, "")
                 user.password = it.getString(PASSWORD, "")
+                user.token = it.getString(TOKEN, "")
             }
 
         }
     }
 
+    fun saveSwitch(remember: Rebember){
+        this.remember = remember
+        shared?.let {
+            it.edit().putInt(REMEMBER, remember.ordinal).apply()
+        }
+        savedPreferences()
+    }
+
     fun getPreferences(): User? = if(isSave()) user else null
+
+    fun getPreferencesRemember(): Rebember? = remember
 
 
     fun isSave():Boolean {

@@ -10,36 +10,33 @@ class User(override var username: String, override var password: String) : UserC
 
     var repository: UserContract.IRepository? = null
 
-    var agency: String? = null
-    var balance: Double? = null
-    var bankAccount: String? = null
     var name: String? = null
     var userId: Int? = null
+    var token: String? = null
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readInt(),
             parcel.readString()) {
-        agency = parcel.readString()
-        balance = parcel.readValue(Double::class.java.classLoader) as? Double
-        bankAccount = parcel.readString()
+        username = parcel.readString()
+        password = parcel.readString()
         name = parcel.readString()
         userId = parcel.readValue(Int::class.java.classLoader) as? Int
+        token = parcel.readString()
     }
 
     constructor(
             username: String,
             password: String,
-            agency: String,
-            balance: Double,
-            bankAccount: String,
             name: String,
-            userId: Int
+            userId: Int,
+            token: String
     ):this(username, password) {
-        this.agency = agency
-        this.balance = balance
-        this.bankAccount = bankAccount
         this.name = name
         this.userId = userId
+        this.token = token
     }
 
     override fun isValidEmpty(): Boolean = (username.isEmpty() || password.isEmpty())
@@ -84,18 +81,15 @@ class User(override var username: String, override var password: String) : UserC
             override fun onUnsuccessful(error: String) {
                 listener.onUnsuccessful(error)
             }
-
         })
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(username)
         parcel.writeString(password)
-        parcel.writeString(agency)
-        parcel.writeValue(balance)
-        parcel.writeString(bankAccount)
         parcel.writeString(name)
         parcel.writeValue(userId)
+        parcel.writeString(token)
     }
 
     override fun describeContents(): Int {
