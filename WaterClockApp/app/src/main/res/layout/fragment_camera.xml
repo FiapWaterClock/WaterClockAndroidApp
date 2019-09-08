@@ -35,7 +35,7 @@
         app:layout_constraintStart_toEndOf="@+id/buttonSavaCamera" />
 
     <TextureView
-        android:id="@+id/textureViewCamera"
+        android:id="@+id/surfaceViewCamera"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
@@ -43,6 +43,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonSavaCamera"
+        app:layout_constraintCircleRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
