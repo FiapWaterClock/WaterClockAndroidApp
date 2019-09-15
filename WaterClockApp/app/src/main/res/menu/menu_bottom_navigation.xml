@@ -6,16 +6,17 @@
         android:iconTint="@color/colorPrimary"
         app:showAsAction="ifRoom"
         android:title="House" />
-    <item android:icon="@mipmap/ic_bill"
-        android:id="@+id/ic_bill"
-        app:showAsAction="ifRoom"
-        android:iconTint="@color/colorPrimary"
-        android:title="Bill" />
+
     <item android:icon="@mipmap/ic_calendar"
         android:id="@+id/ic_calendar"
         app:showAsAction="ifRoom"
         android:iconTint="@color/colorPrimary"
         android:title="Calendar" />
+    <item android:icon="@mipmap/ic_bill"
+        android:id="@+id/ic_bill"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/colorPrimary"
+        android:title="Bill" />
     <item android:icon="@mipmap/ic_camera"
         android:id="@+id/ic_camera"
         app:showAsAction="ifRoom"

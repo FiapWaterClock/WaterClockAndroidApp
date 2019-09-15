@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import br.com.waterclockapp.R;
 import br.com.waterclockapp.domain.User;
+import br.com.waterclockapp.ui.information.InformationFragment;
 import br.com.waterclockapp.util.Preferences;
 import br.com.waterclockapp.util.Rebember;
 
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         loadUI();
+        showFragment(new InformationFragment());
 
 
         navigationView.setOnNavigationItemSelectedListener(menuitem -> {
