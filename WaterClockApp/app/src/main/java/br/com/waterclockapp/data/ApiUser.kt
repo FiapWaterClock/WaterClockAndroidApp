@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 interface ApiUser {
 
     @FormUrlEncoded
-    @POST("login")
+    @POST("oauth/token")
     fun login(
             @Field("user") username: String,
             @Field("password") password: String
@@ -34,7 +34,7 @@ interface ApiUser {
             return Retrofit.Builder()
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("https://bank-app-test.herokuapp.com/api/")
+                    .baseUrl("https://fiapwaterclock.herokuapp.com/")
                     .build()
                     .create(ApiUser::class.java)
         }
