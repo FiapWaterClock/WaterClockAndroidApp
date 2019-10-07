@@ -16,6 +16,7 @@ interface ApiUser {
     @FormUrlEncoded
     @POST("oauth/token")
     fun login(
+            @Field("grant_type") grantType: String,
             @Field("user") username: String,
             @Field("password") password: String
     ): Call<LoginModel>

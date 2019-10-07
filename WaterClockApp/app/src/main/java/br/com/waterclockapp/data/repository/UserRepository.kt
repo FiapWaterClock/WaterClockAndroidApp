@@ -14,7 +14,7 @@ class UserRepository :UserContract.IRepository{
 
 
    override fun startLogin(username: String, password: String, onResult: BaseCallback<User>) {
-        ApiUser.invoke().login(username, password).enqueue(object : Callback<LoginModel> {
+        ApiUser.invoke().login("password", username, password).enqueue(object : Callback<LoginModel> {
             override fun onFailure(call: Call<LoginModel>, t: Throwable) {
                 t.message?.let { onResult.onUnsuccessful(it) }
             }

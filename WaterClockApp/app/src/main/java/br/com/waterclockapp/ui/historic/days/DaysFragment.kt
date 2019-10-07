@@ -1,21 +1,32 @@
 package br.com.waterclockapp.ui.historic.days
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.waterclockapp.R
+import br.com.waterclockapp.data.model.ConsumptionModel
 import br.com.waterclockapp.data.model.DayModel
+import br.com.waterclockapp.ui.HomePresenter
+import br.com.waterclockapp.ui.historic.HistoricContract
+import br.com.waterclockapp.ui.historic.HistoricPresenter
+import br.com.waterclockapp.ui.login.LoginActivity
+import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_days.*
 import java.util.*
 
-class DaysFragment(var month: Int, var year: Int) : Fragment() {
+class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract.View {
+
+
+    private lateinit var presenter: HistoricContract.Presenter
     private val days = listOf(
             DayModel(10.2 ,20.34, GregorianCalendar(2019, 10, 10), "Teste de descricao"),
             DayModel(11.2 ,30.34, GregorianCalendar(2019, 10, 11), "Teste de descricao"),
@@ -41,10 +52,38 @@ class DaysFragment(var month: Int, var year: Int) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        presenter = HistoricPresenter(this)
+        actionRefresh()
+        presenter.getConsumptionMonth(month, year)
+
+    }
+
+    private fun actionRefresh() {
+        swipeRefreshLayoutDays.setOnRefreshListener {
+            presenter.getConsumptionMonth(month, year)
+        }
+    }
+
+    override fun notification(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun initInformations(models: List<ConsumptionModel>) {
         recyclerViewDays.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = DayAdapter(days)
         }
+    }
+
+    override fun showProgress(show: Boolean) {
+        swipeRefreshLayoutDays.isRefreshing = show
+    }
+
+    override fun logout() {
+        val intentHome = Intent(activity, LoginActivity::class.java)
+        Preferences.clearPreferences()
+        startActivity(intentHome)
+        activity?.finish()
     }
 
 

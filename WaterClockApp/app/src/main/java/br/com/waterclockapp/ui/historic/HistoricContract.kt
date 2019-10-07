@@ -1,16 +1,16 @@
-package br.com.waterclockapp.ui.information
+package br.com.waterclockapp.ui.historic
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.data.model.ConsumptionModel
 
-class InformationContract{
+class HistoricContract {
+
     interface View {
         fun notification(message: String)
 
-        fun initRecyclerView(models: List<ConsumptionModel>)
+        fun initInformations(models: List<ConsumptionModel>)
 
-        fun showProgressRecycler(show: Boolean)
+        fun showProgress(show: Boolean)
 
         fun logout()
     }
