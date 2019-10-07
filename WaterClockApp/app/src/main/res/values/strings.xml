@@ -2,7 +2,7 @@
     <string name="app_name">WaterClockApp</string>
     <string name="water_clock">WATER CLOCK</string>
     <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password"><b>Password</b></string>
     <string name="action_sign_in">Sign in</string>
 
     <!-- TODO: Remove or change this placeholder text -->

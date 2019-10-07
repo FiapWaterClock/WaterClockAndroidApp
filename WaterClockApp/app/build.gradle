@@ -46,6 +46,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
 
+    //Graphy
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
     // Better dateTime-time support even on older Android versions
     implementation "com.jakewharton.threetenabp:threetenabp:1.1.0"
 }

@@ -17,4 +17,6 @@ const val USER_ACCOUNT:String ="USER_ACCOUNT"
 
 const val DIALOG_MESSAGE_CLEAN_SETTINGS = "Deseja realmente limpar as credenciais salvas?";
 
+const val DIALOG_SEND_IMAGE = "Deseja realmente enviar essa imagem?"
+
 const val CONNECTION_INTERNTET_ERROR = "Internet sem conexão"

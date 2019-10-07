@@ -36,6 +36,7 @@ void setup() {
   //wifiManager.resetSettings();
 
   wifiManager.autoConnect("AutoConnectAP");
+  wifiManager.setMinimumSignalQuality(4);
   Serial.println("Connected.");
 
   mqtt.setServer(HOST, PORT);
@@ -78,11 +79,11 @@ void enviarMqttResponse(){
           char texto[200];
           StaticJsonBuffer<200> jsonBuffer;
           JsonObject& json = jsonBuffer.createObject();
-          json["id"] = ID;
+          json["clockId"] = ID;
           if (!isnan(fluxoAcumulado)) {
             
             fluxoAcumulado = fluxoAcumulado/contador;
-            json["flow"] = fluxoAcumulado;
+            json["litersPerMinute"] = fluxoAcumulado;
             contador = 0;
             fluxoAcumulado = 0;
 

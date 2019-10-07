@@ -2,8 +2,14 @@ package br.com.waterclockapp.ui.camera;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraCaptureSession;
@@ -16,6 +22,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -34,7 +42,11 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -48,9 +60,11 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.waterclockapp.R;
+import br.com.waterclockapp.util.ConstantsKt;
 
 public class CameraFragment extends Fragment {
 
+    private static final int GALLERY_REQUEST_CODE = 756;
     private Size previewSize;
     private Size jpegSizes[] = null;
 
@@ -63,7 +77,8 @@ public class CameraFragment extends Fragment {
     private CameraDevice cameraDevice;
     private CaptureRequest.Builder previewBuilder;
     private CameraCaptureSession previewSession;
-    Button getPicture;
+    private Button getPicture;
+    private Button getGallery;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -89,6 +104,45 @@ public class CameraFragment extends Fragment {
         getPicture.setOnClickListener(v -> {
             getPicture();
         });
+
+        getGallery = view.findViewById(R.id.buttonOpenGallery);
+        getGallery.setOnClickListener( v -> getGallery());
+    }
+
+    private void getGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        String[] mineTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mineTypes);
+        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+        //openCamera();
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case GALLERY_REQUEST_CODE:
+                    Uri selectedImage = data.getData();
+                    //
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String imgDecodableString = cursor.getString(columnIndex);
+                    cursor.close();
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString);
+                    showDialogSend(bitmap);
+                    Toast.makeText(getActivity(), "PEGOU FOTO " + bitmap.toString(), Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+        openCamera();
+
     }
 
     private void getPicture() {
@@ -140,9 +194,13 @@ public class CameraFragment extends Fragment {
                     OutputStream outputStream=null;
                     try
                     {
-                        outputStream=new FileOutputStream(file12);
+                        outputStream= new FileOutputStream(file12);
                         outputStream.write(bytes);
+
                         Toast.makeText(getActivity(), "PEGOU FOTO", Toast.LENGTH_LONG).show();
+                        Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        showDialogSend(image);
+
                     }catch (Exception e)
                     {
                         e.printStackTrace();
@@ -325,4 +383,21 @@ public class CameraFragment extends Fragment {
         System.out.println("SAVE WITH SUCCESS");
         return mediaFile;
     }
+
+    private void showDialogSend(Bitmap image){
+        Dialog dialog = new Dialog(getContext(), R.style.CustomAlertDialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.send_image_dialog);
+        dialog.setCancelable(false);
+        ((ImageView) dialog.findViewById(R.id.imageViewSendPhoto)).setImageBitmap(image);
+        ((TextView) dialog.findViewById(R.id.textViewDialogQuestion)).setText(ConstantsKt.DIALOG_SEND_IMAGE);
+        dialog.show();
+
+        dialog.findViewById(R.id.buttonNoChoose).setOnClickListener(v-> dialog.dismiss());
+        dialog.findViewById(R.id.buttonYesChoose).setOnClickListener(v-> {
+            Toast.makeText(getContext(), "ENVIADO", Toast.LENGTH_LONG).show();
+            dialog.dismiss();
+        } );
+    }
+
 }

@@ -4,21 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.historic.HistoricFragment">
 
+
+    <FrameLayout
+        android:id="@+id/historicFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/historicLabLayout">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/amaranth"
         android:text="Historico"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +41,7 @@
         android:id="@+id/historicMonthConstraintLayout"
         android:layout_width="0dp"
         android:layout_height="57dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView">
@@ -56,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
+            android:fontFamily="@font/amaranth"
             android:text="Jan"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
@@ -95,32 +111,24 @@
         android:id="@+id/historicLabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        app:tabTextColor="@color/colorWhite"
+        android:background="@color/colorBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/historicMonthConstraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/historicMonthConstraintLayout"
+        app:tabTextColor="@color/colorWhite">
 
         <com.google.android.material.tabs.TabItem
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/amaranth"
             android:text="Mês" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/amaranth"
             android:text="Dia" />
 
     </com.google.android.material.tabs.TabLayout>
-
-    <FrameLayout
-        android:id="@+id/historicFrameLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/historicLabLayout">
-
-    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

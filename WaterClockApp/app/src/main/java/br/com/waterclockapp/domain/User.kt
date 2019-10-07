@@ -68,10 +68,10 @@ class User(override var username: String, override var password: String) : UserC
 
         if(isValidEmpty()) throw ValidationException("User or Password is empty")
 
-        if(!(validationCpf() || validationEmail()))
-            throw ValidationException("User field must be a email or CPF format")
+        //if(!(validationCpf() || validationEmail()))
+          //  throw ValidationException("User field must be a email or CPF format")
 
-        if(!validationPassword()) throw ValidationException("Password format is incorrect")
+        //if(!validationPassword()) throw ValidationException("Password format is incorrect")
 
         repository?.startLogin(username, password, object : BaseCallback<User>{
             override fun onSuccessful(value: User) {
