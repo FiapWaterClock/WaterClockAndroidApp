@@ -1,5 +1,6 @@
 package br.com.waterclockapp.ui.information
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.data.model.ConsumptionModel
 
@@ -11,7 +12,8 @@ class InformationContract{
 
         fun showProgressRecycler(show: Boolean)
 
-        fun getActivity(): AppCompatActivity
+
+        fun logout()
     }
 
     interface Presenter {

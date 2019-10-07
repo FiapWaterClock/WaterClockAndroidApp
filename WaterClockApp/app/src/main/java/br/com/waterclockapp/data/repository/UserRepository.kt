@@ -12,7 +12,7 @@ import retrofit2.Response
 
 class UserRepository :UserContract.IRepository{
 
-   /*
+
    override fun startLogin(username: String, password: String, onResult: BaseCallback<User>) {
         ApiUser.invoke().login(username, password).enqueue(object : Callback<LoginModel> {
             override fun onFailure(call: Call<LoginModel>, t: Throwable) {
@@ -29,8 +29,8 @@ class UserRepository :UserContract.IRepository{
 
         })
     }
-    */
 
+    /*
     override fun startLogin(username: String, password: String, onResult: BaseCallback<User>) {
         FakeRestClient.getApiInterface().mockLogin(username, password)
                 .enqueue(object : Callback<LoginModel> {
@@ -48,6 +48,6 @@ class UserRepository :UserContract.IRepository{
                     }
                 })
     }
-
+    */
 
 }
