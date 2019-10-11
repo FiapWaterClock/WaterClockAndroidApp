@@ -12,22 +12,39 @@ import br.com.waterclockapp.util.Preferences
 
 class SettingsPresenter(val view: SettingsContract.View) : SettingsContract.Presenter {
     override fun getUserInformation() {
+
+        try{
+
+        view.showProgressRecycler(true)
         view.getContext()?.let { verifyNetwork(it) }
 
         Preferences.getPreferences()?.let {
             val user: User = it
             user.repository = UserRepository()
+            user.email = Preferences.getPreferences()?.email
             user.getUserInformation(object : BaseCallback<UserModel>{
                 override fun onSuccessful(value: UserModel) {
                     view.initRecyclerView(value.clock)
+                    view.showProgressRecycler(false)
                 }
 
                 override fun onUnsuccessful(error: String) {
                     view.notification(error)
+                    view.showProgressRecycler(false)
                 }
 
             })
         }
+
+        }catch (e: Exception){
+            e.message?.let { view.notification(it) }
+            view.showProgressRecycler(false)
+        }
+
+
+    }
+
+    override fun updateProfile(userModel: UserModel) {
 
 
     }

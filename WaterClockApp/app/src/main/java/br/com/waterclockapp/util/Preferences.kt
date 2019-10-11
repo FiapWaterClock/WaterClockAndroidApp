@@ -26,14 +26,18 @@ object Preferences {
             it.edit()
                 .putString(USERNAME, user.username)
                 .putString(PASSWORD, user.password)
-                .putString(NAME, user.email)
-                .putInt(USERID, user.userId!!)
+                .putString(EMAIL, user.email)
+                .putInt(USERID, user.userId ?: 0)
                 .putString(TOKEN, user.token)
+                    .putString(NAME, user.name)
+                    .putInt(CLOCK, user.clockId?: 0)
                 .apply()
         }
 
         savedPreferences()
     }
+
+
 
 
 

@@ -19,8 +19,8 @@ class ConsumptionRepository : ConsumptionContract.IRepository {
                     }
 
                     override fun onResponse(call: Call<List<ConsumptionModel>>, response: Response<List<ConsumptionModel>>) {
-                        if(!response.isSuccessful) return onResult.onUnsuccessful(response.message())
                         if(response.body() == null) return onResult.onUnsuccessful("Lista Vazia")
+                        if(!response.isSuccessful) return onResult.onUnsuccessful(response.message())
                         response.body()?.let {
                             onResult.onSuccessful(it)
                         }
@@ -37,8 +37,8 @@ class ConsumptionRepository : ConsumptionContract.IRepository {
                     }
 
                     override fun onResponse(call: Call<ConsumptionModel>, response: Response<ConsumptionModel>) {
-                        if(!response.isSuccessful) return onResult.onUnsuccessful(response.message())
                         if(response.body() == null) return onResult.onUnsuccessful("Lista Vazia")
+                        if(!response.isSuccessful) return onResult.onUnsuccessful(response.message())
                         response.body()?.let {
                             onResult.onSuccessful(it)
                         }

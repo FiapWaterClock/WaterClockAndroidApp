@@ -1,6 +1,8 @@
 package br.com.waterclockapp.ui.historic.days
 
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +25,8 @@ class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract
 
 
     private lateinit var presenter: HistoricContract.Presenter
+    private var shortAnimTime:Int = 0
+
     private val days = listOf(
             DayModel(10.2 ,20.34, GregorianCalendar(2019, 10, 10), "Teste de descricao"),
             DayModel(11.2 ,30.34, GregorianCalendar(2019, 10, 11), "Teste de descricao"),
@@ -49,6 +53,7 @@ class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract
         super.onViewCreated(view, savedInstanceState)
 
         presenter = HistoricPresenter(this)
+        shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
         actionRefresh()
         presenter.getConsumptionMonth(month, year)
 
@@ -73,6 +78,15 @@ class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract
 
     override fun showProgress(show: Boolean) {
         swipeRefreshLayoutDays.isRefreshing = show
+
+        constraintLayoutDay.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
+        swipeRefreshLayoutDays.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
+                .setListener( object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
+                    }
+                })
     }
 
     override fun logout() {

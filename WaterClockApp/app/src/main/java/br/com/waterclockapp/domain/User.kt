@@ -7,14 +7,22 @@ import br.com.waterclockapp.data.model.UserModel
 import br.com.waterclockapp.util.*
 import java.util.regex.Pattern
 
-class User(override var username: String, override var password: String) : UserContract.IUser, Parcelable {
-
+class User() : UserContract.IUser, Parcelable {
+    override var username: String? = null
+    override var password: String? = null
 
     var repository: UserContract.IRepository? = null
-
     var email: String? = null
     var userId: Int? = null
     var token: String? = null
+    var name: String? = null
+    var clockId: Int? = null
+
+
+    constructor(username: String, password: String):this(){
+        this.username = username
+        this.password = password
+    }
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
@@ -41,7 +49,17 @@ class User(override var username: String, override var password: String) : UserC
         this.token = token
     }
 
-    override fun isValidEmpty(): Boolean = (username.isEmpty() || password.isEmpty())
+    constructor(
+            userId: Int,
+            name: String,
+            clockId: Int
+    ):this(){
+        this.userId = userId
+        this.name = name
+        this.clockId = clockId
+    }
+
+    override fun isValidEmpty(): Boolean = ((username ?: "").isEmpty() || (password ?: "").isEmpty())
 
     override fun validationPassword():Boolean{
         val pattern = Pattern.compile(PASSWORD_PATTERN)
@@ -51,7 +69,7 @@ class User(override var username: String, override var password: String) : UserC
 
     override fun validationCpf():Boolean {
         val pattern = Pattern.compile(CPF_PATTERN)
-        val matcher = pattern.matcher(replaceChars(username))
+        val matcher = pattern.matcher(replaceChars(username ?: "") )
         return matcher.matches()
     }
 
@@ -62,7 +80,7 @@ class User(override var username: String, override var password: String) : UserC
                 .replace("*", "")
     }
 
-    override fun validationEmail():Boolean = Formation.emailFormat(username)
+    override fun validationEmail():Boolean = Formation.emailFormat(username ?: "")
 
     override fun startLogin(listener: BaseCallback<User>) {
 
@@ -70,12 +88,12 @@ class User(override var username: String, override var password: String) : UserC
 
         if(isValidEmpty()) throw ValidationException("User or Password is empty")
 
-        //if(!(validationCpf() || validationEmail()))
-          //  throw ValidationException("User field must be a email or CPF format")
+        if(!validationEmail())
+            throw ValidationException("User field must be a email or CPF format")
 
         //if(!validationPassword()) throw ValidationException("Password format is incorrect")
 
-        repository?.startLogin(username, password, object : BaseCallback<User>{
+        repository?.startLogin(username ?: "", password ?: "", object : BaseCallback<User>{
             override fun onSuccessful(value: User) {
                 listener.onSuccessful(value)
             }
@@ -88,9 +106,9 @@ class User(override var username: String, override var password: String) : UserC
 
     override fun getUserInformation(listener: BaseCallback<UserModel>) {
         if(repository == null) throw ValidationException("Repository nullable")
-        if(userId == null) throw ValidationException("User not found")
+        //if(email == null) throw ValidationException("User not found")
         if(token == null) throw ValidationException("Token not found")
-        repository?.getUserInformation(object : BaseCallback<UserModel>{
+        repository?.getUserInformation(email ?: "", token?: "", object : BaseCallback<UserModel>{
             override fun onSuccessful(value: UserModel) {
                 listener.onSuccessful(value)
             }

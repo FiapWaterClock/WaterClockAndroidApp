@@ -13,16 +13,17 @@
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/button_customized_login"
         android:fontFamily="@font/happy_monkey"
         android:text="@string/action_sign_in"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonNewRegister"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonNewRegister"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -30,7 +31,7 @@
         style="?android:textAppearanceSmall"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/background_customized_new_register"
@@ -41,7 +42,18 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonLogin" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayoutLoginFields"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayoutLoginFields"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/waterclock" />
 
     <ProgressBar
         android:id="@+id/progressBarButtonLogin"
@@ -50,7 +62,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/buttonLogin"
-        app:layout_constraintEnd_toEndOf="@+id/buttonLogin"
+        app:layout_constraintEnd_toEndOf="@+id/buttonNewRegister"
         app:layout_constraintStart_toStartOf="@+id/buttonLogin"
         app:layout_constraintTop_toTopOf="@+id/buttonLogin" />
 
@@ -166,15 +178,5 @@
 
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayoutLoginFields"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayoutLoginFields"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/waterclock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

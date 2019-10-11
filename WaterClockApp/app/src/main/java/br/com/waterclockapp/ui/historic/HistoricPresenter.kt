@@ -13,18 +13,25 @@ import br.com.waterclockapp.util.NotConnectionNetwork
 class HistoricPresenter(val view: HistoricContract.View) : HistoricContract.Presenter{
     
     override fun getConsumptionMonth(month: Int, year: Int) {
-        val consumption = Consumption(month, year)
-        consumption.repository = ConsumptionRepository()
-        consumption.getConsumptionAllMonth(object : BaseCallback<ConsumptionModel> {
-            override fun onSuccessful(value: ConsumptionModel) {
-                getConsumptionDay(consumption, value)
-            }
+        view.showProgress(true)
+        try{
+            val consumption = Consumption(month, year)
+            consumption.repository = ConsumptionRepository()
+            consumption.getConsumptionAllMonth(object : BaseCallback<ConsumptionModel> {
+                override fun onSuccessful(value: ConsumptionModel) {
+                    getConsumptionDay(consumption, value)
+                }
 
-            override fun onUnsuccessful(error: String) {
-                view.notification(error)
-            }
+                override fun onUnsuccessful(error: String) {
+                    getConsumptionDay(consumption, ConsumptionModel(0, "", 0.0))
+                }
 
-        })
+            })
+        }catch (e: Exception){
+            e.message?.let { view.notification(it) }
+            view.showProgress(false)
+        }
+
     }
 
     private fun getConsumptionDay(consumption: Consumption, month: ConsumptionModel) {
@@ -32,10 +39,13 @@ class HistoricPresenter(val view: HistoricContract.View) : HistoricContract.Pres
             override fun onSuccessful(value: List<ConsumptionModel>) {
                 if(value.isEmpty()) return view.initInformations(month, value)
                 view.initInformations(month, value)
+                view.showProgress(false)
             }
 
             override fun onUnsuccessful(error: String) {
+                view.initInformations(month, listOf())
                 view.notification(error)
+                view.showProgress(false)
             }
 
         })

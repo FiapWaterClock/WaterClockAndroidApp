@@ -17,18 +17,23 @@ class InformationPresenter(val view: InformationContract.View) : InformationCont
         val consumption = Consumption(month, year)
         consumption.repository = ConsumptionRepository()
         try{
+            view.showProgressRecycler(true)
             consumption.getConsumptionAllMonth(object : BaseCallback<ConsumptionModel> {
                 override fun onSuccessful(value: ConsumptionModel) {
                     getConsumptionDay(consumption, value)
                 }
 
                 override fun onUnsuccessful(error: String) {
-                    view.notification(error)
+                    getConsumptionDay(consumption, ConsumptionModel(0,"", 0.0))
+
                 }
 
             })
         }catch (e: Exception){
             e.message?.let { view.notification(it) }
+            view.showProgressRecycler(false)
+            view.logout()
+
         }
     }
 
@@ -37,10 +42,13 @@ class InformationPresenter(val view: InformationContract.View) : InformationCont
             override fun onSuccessful(value: List<ConsumptionModel>) {
                 if(value.isEmpty()) return view.initView(month, month)
                 view.initView(month, value[value.size - 1])
+                view.showProgressRecycler(false)
             }
 
             override fun onUnsuccessful(error: String) {
                 view.notification(error)
+                view.initView(month, ConsumptionModel(0,"", 0.0))
+                view.showProgressRecycler(false)
             }
 
         })

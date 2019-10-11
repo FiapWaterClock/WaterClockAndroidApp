@@ -29,9 +29,9 @@ class HistoricFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        verifyMonth()
         month = calendar.get(Calendar.MONTH + 1)
         year = calendar.get(Calendar.YEAR)
-        verifyMonth()
         actionTabSelected()
         actionArrow()
         positionFragment()
@@ -40,8 +40,13 @@ class HistoricFragment : Fragment() {
     private fun actionArrow() {
         val thisMonth = calendar.get(Calendar.MONTH)
 
+        var contador = 6
+        setTextDate()
+        rightImageView.visibility = View.INVISIBLE
+
         leftImageView.setOnClickListener {
-            if(month >= thisMonth - 2){
+            if(contador >= 0){
+                contador--
                 calendar.add(Calendar.MONTH, -1)
                 setTextDate()
                 leftImageView.visibility = View.VISIBLE
@@ -51,11 +56,16 @@ class HistoricFragment : Fragment() {
                 leftImageView.visibility = View.INVISIBLE
                 positionFragment()
             }
+
+            if(contador == 0)
+                leftImageView.visibility = View.INVISIBLE
+
         }
 
         rightImageView.setOnClickListener {
             if(month <= thisMonth) {
                 calendar.add(Calendar.MONTH, +1)
+                contador++
                 setTextDate()
                 leftImageView.visibility = View.VISIBLE
                 rightImageView.visibility = View.VISIBLE
@@ -72,7 +82,7 @@ class HistoricFragment : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun setTextDate() {
-        monthTextView.text = SimpleDateFormat("MMM").format(calendar.time)
+        monthTextView.text = SimpleDateFormat("MMM").format(calendar.time).toUpperCase()
         yearTextView.text = calendar.get(Calendar.YEAR).toString()
         month = calendar.get(Calendar.MONTH) + 1
         year = calendar.get(Calendar.YEAR)
