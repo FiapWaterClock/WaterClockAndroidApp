@@ -49,6 +49,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     override fun showProgressBar(show: Boolean) {
         buttonLogin.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        buttonNewRegister.visibility = if(show) View.INVISIBLE else View.VISIBLE
         progressBarButtonLogin.visibility = if(show) View.VISIBLE else View.GONE
         progressBarButtonLogin.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
                 .setListener( object : AnimatorListenerAdapter() {

@@ -38,9 +38,9 @@ class UserRepository :UserContract.IRepository{
         })
     }
 
-    override fun getUserInformation(onResult: BaseCallback<UserModel>) {
-        Preferences.getPreferences()?.let {
-            UserApi.invoke().getUserInformations(it.userId!!, "bearer ${it.token!!}").enqueue(object : Callback<UserModel>{
+    override fun getUserInformation(email: String, token: String, onResult: BaseCallback<UserModel>) {
+        var tokenNow = "bearer $token"
+            UserApi.invoke().getUserInformations(email, tokenNow  ).enqueue(object : Callback<UserModel>{
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {
                     t.message?.let { message -> onResult.onUnsuccessful(message) }
                 }
@@ -57,8 +57,6 @@ class UserRepository :UserContract.IRepository{
                 }
 
             })
-
-        }
 
     }
 

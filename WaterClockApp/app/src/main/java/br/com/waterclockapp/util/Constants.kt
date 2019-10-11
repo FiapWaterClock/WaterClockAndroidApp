@@ -12,6 +12,8 @@ const val REMEMBER = "remember"
 const val NAME_PREFS = "user_preferences"
 const val USERID = "user_id"
 const val NAME = "firstName"
+const val EMAIL = "email"
+const val CLOCK = "clock_id"
 
 const val USER_ACCOUNT:String ="USER_ACCOUNT"
 

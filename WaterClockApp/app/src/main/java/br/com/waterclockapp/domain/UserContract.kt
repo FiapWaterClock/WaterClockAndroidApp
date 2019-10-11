@@ -7,8 +7,8 @@ import br.com.waterclockapp.util.BaseCallback
 class UserContract {
 
     interface IUser{
-        val username: String
-        val password: String
+        var username: String?
+        var password: String?
 
         fun isValidEmpty(): Boolean
 
@@ -30,7 +30,7 @@ class UserContract {
     interface IRepository {
         fun startLogin(username: String, password: String, onResult: BaseCallback<User>)
 
-        fun getUserInformation(onResult: BaseCallback<UserModel>)
+        fun getUserInformation(email: String, token: String, onResult: BaseCallback<UserModel>)
 
         fun createNewUser(register: RegisterModel, onResult: BaseCallback<UserModel>)
 

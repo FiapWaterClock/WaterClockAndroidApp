@@ -1,6 +1,8 @@
 package br.com.waterclockapp.ui.information
 
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +23,7 @@ class InformationFragment : Fragment(), InformationContract.View {
 
 
     lateinit var presenter: InformationContract.Presenter
+    private var shortAnimTime:Int = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,6 +34,7 @@ class InformationFragment : Fragment(), InformationContract.View {
         super.onViewCreated(view, savedInstanceState)
 
         presenter = InformationPresenter(this)
+        shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
         val calendar = Calendar.getInstance()
         presenter.getConsumptionMonth(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR))
 
@@ -44,14 +48,23 @@ class InformationFragment : Fragment(), InformationContract.View {
 
     @SuppressLint("SetTextI18n")
     override fun initView(consumptionMonth: ConsumptionModel, consumptionDay: ConsumptionModel) {
-        textViewVolumeMonthDay.text = "${(consumptionMonth.litersPerMinute/1000).toString().replace(".",",")}m³"
+        textViewVolumeMonthDay.text = "${(consumptionMonth.litersPerMinute/1000).toString().replace(".",",")} m³"
         textViewValueMonthDay.text = LitersToMoney.convertLitersToMoney(consumptionMonth.litersPerMinute)
         textViewValueDay.text = LitersToMoney.convertDayToMoney(consumptionDay.litersPerMinute, consumptionMonth.litersPerMinute)
-        textViewVolumeDay.text = "${(consumptionDay.litersPerMinute/1000).toString().replace(".",",")}m³"
+        textViewVolumeDay.text = "${(consumptionDay.litersPerMinute/1000).toString().replace(".",",")} m³"
     }
 
     override fun showProgressRecycler(show: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        textViewTitleWaterClock.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        constraintLayoutValueMensal.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        constraintLayoutValueDiario.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        progressBarInformation.visibility = if(show) View.VISIBLE else View.GONE
+        progressBarInformation.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
+                .setListener( object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        progressBarInformation.visibility = if(show) View.VISIBLE else View.GONE
+                    }
+                })
     }
 
     override fun logout() {

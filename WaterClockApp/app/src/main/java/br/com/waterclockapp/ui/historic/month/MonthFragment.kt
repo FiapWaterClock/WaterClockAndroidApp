@@ -1,6 +1,8 @@
 package br.com.waterclockapp.ui.historic.month
 
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
@@ -15,21 +17,25 @@ import br.com.waterclockapp.data.model.DayModel
 import br.com.waterclockapp.ui.historic.HistoricContract
 import br.com.waterclockapp.ui.historic.HistoricPresenter
 import br.com.waterclockapp.ui.login.LoginActivity
+import br.com.waterclockapp.util.LitersToMoney
 import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_month.*
 import lecho.lib.hellocharts.gesture.ContainerScrollType
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener
 import lecho.lib.hellocharts.model.*
+import org.threeten.bp.LocalDate
 import java.util.*
 
 
 class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContract.View {
 
     private lateinit var presenter: HistoricContract.Presenter
+    private var shortAnimTime:Int = 0
 
     private var yAxisValues = mutableListOf<PointValue>()
-    private var daysModel = mutableListOf<DayModel>()
+    private var daysModel = mutableListOf<ConsumptionModel>()
+    private var monthConsumption: ConsumptionModel? = null
     private var axisValues = mutableListOf<AxisValue>()
 
     private val days = listOf(
@@ -58,18 +64,20 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = HistoricPresenter(this)
+        shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime)
         presenter.getConsumptionMonth(month, year)
-        startGraph(days)
+
     }
 
-    private fun startGraph(daysList: List<DayModel>) {
+    private fun startGraph(consumptionList: List<ConsumptionModel>) {
 
 
-        for (i in (daysList.indices)){
-            val element = AxisValue(i.toFloat()).setLabel(daysList[i].date.get(Calendar.DAY_OF_MONTH).toString())
+        for (i in (consumptionList.indices)){
+            val localDate = LocalDate.parse(consumptionList[i].time)
+            val element = AxisValue(i.toFloat()).setLabel(localDate.dayOfMonth.toString())
             axisValues.add(i, element)
-            daysModel.add(i, daysList[i])
-            yAxisValues.add(i, PointValue(i.toFloat(), daysList[i].volume.toFloat()))
+            daysModel.add(i, consumptionList[i])
+            yAxisValues.add(i, PointValue(i.toFloat(), consumptionList[i].litersPerMinute.toFloat()))
         }
 
         val line = Line().apply {
@@ -113,10 +121,10 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
         graphMonthDays.isViewportCalculationEnabled = false
 
         graphMonthDays.onValueTouchListener = object : LineChartOnValueSelectListener {
-            @SuppressLint("ShowToast")
+            @SuppressLint("ShowToast", "SetTextI18n")
             override fun onValueSelected(lineIndex: Int, pointIndex: Int, value: PointValue?) {
-                textViewValueMonthDay.text = "${daysModel[pointIndex].value}"
-                textViewVolumeMonthDay.text = "${daysModel[pointIndex].volume}"
+                textViewVolumeDayGraphy.text = "${(daysModel[pointIndex].litersPerMinute/1000).toString().replace(".",",")} m³"
+                textViewValueDayGaphy.text = LitersToMoney.convertDayToMoney(daysModel[pointIndex].litersPerMinute, monthConsumption?.litersPerMinute ?: 0.0)
             }
 
             override fun onValueDeselected() {
@@ -132,12 +140,23 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun initInformations(models: ConsumptionModel, month: List<ConsumptionModel>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun initInformations(consumptionMonth: ConsumptionModel, month: List<ConsumptionModel>) {
+        monthConsumption = consumptionMonth
+        textViewValueAllMonthDay.text = "${(consumptionMonth.litersPerMinute/1000).toString().replace(".",",")} m³"
+        textViewVolumeAllMonthDay.text = LitersToMoney.convertLitersToMoney(consumptionMonth.litersPerMinute)
+
     }
 
     override fun showProgress(show: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        constraintLayoutGraphy.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        constraintLayoutMonthValues.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        progressBarMonth.visibility = if(show) View.VISIBLE else View.GONE
+        progressBarMonth.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
+                .setListener( object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        progressBarMonth.visibility = if(show) View.VISIBLE else View.GONE
+                    }
+                })
     }
 
     override fun logout() {

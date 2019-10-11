@@ -28,11 +28,11 @@ interface UserApi {
     ): Call<LoginModel>
 
     @Headers(
-            "Content-Type: application/json; charset=UTF-8"
+            "Content-Type: application/json;charset=UTF-8"
     )
-    @GET("api/user/{user_id}")
+    @GET("api/user/email/{email}")
     fun getUserInformations(
-            @Path("user_id") userId: Int,
+            @Path("email") email: String,
             @Header("Authorization") token: String): Call<UserModel>
 
     @Headers(
