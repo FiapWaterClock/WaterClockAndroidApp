@@ -27,8 +27,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/text_round_bold"
             android:fontFamily="@font/happy_monkey"
-            android:text="Gasto Mensal"
+            android:text="Consumption"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,64 +37,58 @@
 
         <TextView
             android:id="@+id/textViewValueTextMonth"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:fontFamily="@font/amaranth"
-            android:text="Valor"
+            android:text="Valor Total:"
             android:textColor="@color/colorWhite"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/textViewVolumeTextMonth"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitleMonth" />
 
         <TextView
             android:id="@+id/textViewVolumeTextMonth"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:fontFamily="@font/amaranth"
-            android:text="Volume"
+            android:text="Volume Total:"
             android:textColor="@color/colorWhite"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textViewValueTextMonth"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitleMonth" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textViewValueTextMonth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewValueTextMonth" />
 
         <TextView
             android:id="@+id/textViewValueMonthDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/amaranth"
             android:maxWidth="115dp"
             android:text="R$ 33,56"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textViewValueTextMonth"
-            app:layout_constraintStart_toStartOf="@+id/textViewValueTextMonth"
-            app:layout_constraintTop_toBottomOf="@+id/textViewValueTextMonth" />
+            app:layout_constraintBottom_toTopOf="@+id/textViewVolumeTextMonth"
+            app:layout_constraintStart_toEndOf="@+id/textViewValueTextMonth"
+            app:layout_constraintTop_toTopOf="@+id/textViewValueTextMonth" />
 
         <TextView
             android:id="@+id/textViewVolumeMonthDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/amaranth"
             android:maxWidth="115dp"
             android:text="12 m³"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textViewVolumeTextMonth"
-            app:layout_constraintStart_toStartOf="@+id/textViewVolumeTextMonth"
-            app:layout_constraintTop_toBottomOf="@+id/textViewVolumeTextMonth" />
+            app:layout_constraintBottom_toBottomOf="@+id/textViewVolumeTextMonth"
+            app:layout_constraintStart_toEndOf="@+id/textViewVolumeTextMonth"
+            app:layout_constraintTop_toTopOf="@+id/textViewVolumeTextMonth" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

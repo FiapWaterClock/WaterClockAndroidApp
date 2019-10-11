@@ -2,15 +2,15 @@ package br.com.waterclockapp.ui.login
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.R
 import br.com.waterclockapp.domain.User
 import br.com.waterclockapp.ui.HomeActivity
+import br.com.waterclockapp.ui.register.RegisterActivity
 import br.com.waterclockapp.util.Preferences
 import br.com.waterclockapp.util.Rebember
 import kotlinx.android.synthetic.main.activity_login.*
@@ -26,7 +26,14 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
         loadUI()
         loadSaveButton()
+        loadCreateNewUser()
         verifyLogin()
+    }
+
+    private fun loadCreateNewUser() {
+        buttonNewRegister.setOnClickListener {
+            goToRegister()
+        }
     }
 
     private fun loadSaveButton() {
@@ -59,6 +66,12 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun goToRegister(){
+        val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun notification(message: String) {

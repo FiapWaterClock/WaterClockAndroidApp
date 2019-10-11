@@ -5,24 +5,23 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import br.com.waterclockapp.data.model.ConsumptionModel
-
 import br.com.waterclockapp.data.model.DayModel
 import br.com.waterclockapp.ui.historic.HistoricContract
 import br.com.waterclockapp.ui.historic.HistoricPresenter
 import br.com.waterclockapp.ui.login.LoginActivity
 import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_month.*
-import lecho.lib.hellocharts.model.*
-import java.util.*
 import lecho.lib.hellocharts.gesture.ContainerScrollType
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener
+import lecho.lib.hellocharts.model.*
+import java.util.*
 
 
 class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContract.View {
@@ -133,7 +132,7 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun initInformations(models: List<ConsumptionModel>) {
+    override fun initInformations(models: ConsumptionModel, month: List<ConsumptionModel>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

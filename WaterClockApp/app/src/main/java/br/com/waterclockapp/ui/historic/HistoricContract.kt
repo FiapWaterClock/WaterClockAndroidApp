@@ -8,7 +8,7 @@ class HistoricContract {
     interface View {
         fun notification(message: String)
 
-        fun initInformations(models: List<ConsumptionModel>)
+        fun initInformations(day: ConsumptionModel, month: List<ConsumptionModel>)
 
         fun showProgress(show: Boolean)
 

@@ -15,9 +15,23 @@ class HistoricPresenter(val view: HistoricContract.View) : HistoricContract.Pres
     override fun getConsumptionMonth(month: Int, year: Int) {
         val consumption = Consumption(month, year)
         consumption.repository = ConsumptionRepository()
-        consumption.getConsumptionMonth(object : BaseCallback<List<ConsumptionModel>> {
+        consumption.getConsumptionAllMonth(object : BaseCallback<ConsumptionModel> {
+            override fun onSuccessful(value: ConsumptionModel) {
+                getConsumptionDay(consumption, value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                view.notification(error)
+            }
+
+        })
+    }
+
+    private fun getConsumptionDay(consumption: Consumption, month: ConsumptionModel) {
+        consumption.getConsumptionMonth(object : BaseCallback<List<ConsumptionModel>>{
             override fun onSuccessful(value: List<ConsumptionModel>) {
-                view.notification(value.toString())
+                if(value.isEmpty()) return view.initInformations(month, value)
+                view.initInformations(month, value)
             }
 
             override fun onUnsuccessful(error: String) {

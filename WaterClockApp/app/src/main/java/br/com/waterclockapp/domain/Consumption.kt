@@ -12,7 +12,7 @@ class Consumption(override var month: Int, override var year: Int): ConsumptionC
     override fun getConsumptionMonth(listener: BaseCallback<List<ConsumptionModel>>) {
         if(isValidEmpty()) throw ValidationException("Month or Year is empty")
 
-        repository?.getConsumptionMonth(123, month, year, object: BaseCallback<List<ConsumptionModel>>{
+        repository?.getConsumptionMonth(1, month, year, object: BaseCallback<List<ConsumptionModel>>{
             override fun onSuccessful(value: List<ConsumptionModel>) {
                 listener.onSuccessful(value)
             }
@@ -24,5 +24,18 @@ class Consumption(override var month: Int, override var year: Int): ConsumptionC
         })
     }
 
+    override fun getConsumptionAllMonth(listener: BaseCallback<ConsumptionModel>) {
+        if(isValidEmpty()) throw ValidationException("Month or Year is empty")
+        repository?.getConsumptionAllMonth(1, month,year, object : BaseCallback<ConsumptionModel>{
+            override fun onSuccessful(value: ConsumptionModel) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
+    }
     override fun isValidEmpty(): Boolean = (month == 0 || year == 0)
 }

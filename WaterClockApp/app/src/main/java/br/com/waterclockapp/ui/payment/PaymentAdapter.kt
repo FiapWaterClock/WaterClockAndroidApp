@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.waterclockapp.R
 import br.com.waterclockapp.data.model.PaymentModel
-import br.com.waterclockapp.ui.historic.days.DayAdapter
 
 class PaymentAdapter(var payments: List<PaymentModel>) : RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PaymentViewHolder {
@@ -29,7 +28,7 @@ class PaymentAdapter(var payments: List<PaymentModel>) : RecyclerView.Adapter<Pa
         private var paymentStatus : TextView? = null
 
         init {
-            paymentDescription = itemView.findViewById(R.id.textViewPaymentDescription)
+            paymentDescription = itemView.findViewById(R.id.textViewPaymentInstallationDate)
             paymentStatus = itemView.findViewById(R.id.textViewPaymentStatus)
         }
 

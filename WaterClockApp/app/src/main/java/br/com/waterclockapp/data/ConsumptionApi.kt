@@ -1,7 +1,6 @@
 package br.com.waterclockapp.data
 
 import br.com.waterclockapp.data.model.ConsumptionModel
-import br.com.waterclockapp.domain.Consumption
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -9,11 +8,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
-interface ApiConsumption {
+interface ConsumptionApi {
 
+    @Headers(
+            "Content-Type: application/json;charset=UTF-8"
+    )
     @GET("api/consumption/clock/{clock_id}/month/{month}/year/{year}")
     fun getCustomer(
             @Path("clock_id") clockId: Int,
@@ -21,9 +24,19 @@ interface ApiConsumption {
             @Path("year") year: Int,
             @Header("Authorization") token: String): Call<List<ConsumptionModel>>
 
+    @Headers(
+            "Content-Type: application/json;charset=UTF-8"
+    )
+    @GET("api/consumption/all/clock/{clock_id}/month/{month}/year/{year}")
+    fun getCustomerAll(
+            @Path("clock_id") clockId: Int,
+            @Path("month") month: Int,
+            @Path("year") year: Int,
+            @Header("Authorization") token: String): Call<ConsumptionModel>
+
 
     companion object {
-        operator fun invoke () : ApiConsumption {
+        operator fun invoke () : ConsumptionApi {
             val interceptor = HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY)
 
@@ -38,7 +51,7 @@ interface ApiConsumption {
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl("https://fiapwaterclock.herokuapp.com/")
                     .build()
-                    .create(ApiConsumption::class.java)
+                    .create(ConsumptionApi::class.java)
         }
     }
 }

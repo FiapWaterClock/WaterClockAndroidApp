@@ -26,7 +26,7 @@ object Preferences {
             it.edit()
                 .putString(USERNAME, user.username)
                 .putString(PASSWORD, user.password)
-                .putString(NAME, user.name)
+                .putString(NAME, user.email)
                 .putInt(USERID, user.userId!!)
                 .putString(TOKEN, user.token)
                 .apply()

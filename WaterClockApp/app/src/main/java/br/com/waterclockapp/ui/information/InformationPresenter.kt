@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.data.model.ConsumptionModel
 import br.com.waterclockapp.data.repository.ConsumptionRepository
 import br.com.waterclockapp.domain.Consumption
-import br.com.waterclockapp.ui.HomeContract
 import br.com.waterclockapp.util.BaseCallback
 import br.com.waterclockapp.util.CONNECTION_INTERNTET_ERROR
 import br.com.waterclockapp.util.NotConnectionNetwork
@@ -14,11 +13,30 @@ import br.com.waterclockapp.util.NotConnectionNetwork
 class InformationPresenter(val view: InformationContract.View) : InformationContract.Presenter {
 
     override fun getConsumptionMonth(month: Int, year: Int) {
+
         val consumption = Consumption(month, year)
         consumption.repository = ConsumptionRepository()
+        try{
+            consumption.getConsumptionAllMonth(object : BaseCallback<ConsumptionModel> {
+                override fun onSuccessful(value: ConsumptionModel) {
+                    getConsumptionDay(consumption, value)
+                }
+
+                override fun onUnsuccessful(error: String) {
+                    view.notification(error)
+                }
+
+            })
+        }catch (e: Exception){
+            e.message?.let { view.notification(it) }
+        }
+    }
+
+    private fun getConsumptionDay(consumption: Consumption, month: ConsumptionModel) {
         consumption.getConsumptionMonth(object : BaseCallback<List<ConsumptionModel>>{
             override fun onSuccessful(value: List<ConsumptionModel>) {
-                view.notification(value.toString())
+                if(value.isEmpty()) return view.initView(month, month)
+                view.initView(month, value[value.size - 1])
             }
 
             override fun onUnsuccessful(error: String) {

@@ -11,9 +11,13 @@ class ConsumptionContract {
 
         fun isValidEmpty(): Boolean
         fun getConsumptionMonth(listener: BaseCallback<List<ConsumptionModel>>)
+
+        fun getConsumptionAllMonth(listener: BaseCallback<ConsumptionModel>)
     }
 
     interface IRepository{
          fun getConsumptionMonth(clockId: Int, month:Int, year:Int,  onResult: BaseCallback<List<ConsumptionModel>>)
+
+        fun getConsumptionAllMonth(clockId: Int, month:Int, year:Int,  onResult: BaseCallback<ConsumptionModel>)
     }
 }

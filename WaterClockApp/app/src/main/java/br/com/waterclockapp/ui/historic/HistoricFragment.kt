@@ -2,13 +2,12 @@ package br.com.waterclockapp.ui.historic
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-
 import br.com.waterclockapp.R
 import br.com.waterclockapp.ui.historic.days.DaysFragment
 import br.com.waterclockapp.ui.historic.month.MonthFragment
@@ -23,13 +22,16 @@ class HistoricFragment : Fragment() {
     private var year: Int = 0
     private var month: Int = 0
     private var textMonth = ""
-    private var calendar : Calendar = Calendar.getInstance().apply {get(Calendar.MONTH)}
+    private var calendar : Calendar = Calendar.getInstance()
     private lateinit var fragment : Fragment
     private var positionTabLayout = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        month = calendar.get(Calendar.MONTH + 1)
+        year = calendar.get(Calendar.YEAR)
+        verifyMonth()
         actionTabSelected()
         actionArrow()
         positionFragment()
@@ -37,6 +39,7 @@ class HistoricFragment : Fragment() {
 
     private fun actionArrow() {
         val thisMonth = calendar.get(Calendar.MONTH)
+
         leftImageView.setOnClickListener {
             if(month >= thisMonth - 2){
                 calendar.add(Calendar.MONTH, -1)
@@ -86,14 +89,16 @@ class HistoricFragment : Fragment() {
                     positionTabLayout = tab.position
                     positionFragment()
                 }
-
             }
         })
-
-
     }
 
     private fun positionFragment() {
+        if(month == 0 && year == 0){
+            month = calendar.get(Calendar.MONTH) + 1
+            year = calendar.get(Calendar.YEAR)
+        }
+
         when (positionTabLayout) {
             0 -> fragment = MonthFragment(month, year)
             1 -> fragment = DaysFragment(month, year)

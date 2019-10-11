@@ -2,6 +2,8 @@ package br.com.waterclockapp.domain
 
 import android.os.Parcel
 import android.os.Parcelable
+import br.com.waterclockapp.data.model.RegisterModel
+import br.com.waterclockapp.data.model.UserModel
 import br.com.waterclockapp.util.*
 import java.util.regex.Pattern
 
@@ -10,7 +12,7 @@ class User(override var username: String, override var password: String) : UserC
 
     var repository: UserContract.IRepository? = null
 
-    var name: String? = null
+    var email: String? = null
     var userId: Int? = null
     var token: String? = null
 
@@ -22,7 +24,7 @@ class User(override var username: String, override var password: String) : UserC
             parcel.readString()) {
         username = parcel.readString()
         password = parcel.readString()
-        name = parcel.readString()
+        email = parcel.readString()
         userId = parcel.readValue(Int::class.java.classLoader) as? Int
         token = parcel.readString()
     }
@@ -30,11 +32,11 @@ class User(override var username: String, override var password: String) : UserC
     constructor(
             username: String,
             password: String,
-            name: String,
+            email: String,
             userId: Int,
             token: String
     ):this(username, password) {
-        this.name = name
+        this.email = email
         this.userId = userId
         this.token = token
     }
@@ -84,10 +86,26 @@ class User(override var username: String, override var password: String) : UserC
         })
     }
 
+    override fun getUserInformation(listener: BaseCallback<UserModel>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        if(userId == null) throw ValidationException("User not found")
+        if(token == null) throw ValidationException("Token not found")
+        repository?.getUserInformation(object : BaseCallback<UserModel>{
+            override fun onSuccessful(value: UserModel) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(username)
         parcel.writeString(password)
-        parcel.writeString(name)
+        parcel.writeString(email)
         parcel.writeValue(userId)
         parcel.writeString(token)
     }
@@ -104,5 +122,39 @@ class User(override var username: String, override var password: String) : UserC
         override fun newArray(size: Int): Array<User?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun createNewUser(register: RegisterModel, listener: BaseCallback<UserModel>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        if(register.email.isEmpty() || register.firstName.isEmpty() || register.lastName.isEmpty()
+                || register.password.isEmpty() || register.matchingPassword.isEmpty())
+            throw ValidationException("Fill in all values")
+
+        repository?.createNewUser(register, object : BaseCallback<UserModel>{
+            override fun onSuccessful(value: UserModel) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
+    }
+
+    override fun deleteUser(listener: BaseCallback<Void>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        userId = 1
+        if(userId == 0) throw ValidationException("Repository nullable")
+        repository?.deleteUser(userId!!, object : BaseCallback<Void>{
+            override fun onSuccessful(value: Void) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
     }
 }
