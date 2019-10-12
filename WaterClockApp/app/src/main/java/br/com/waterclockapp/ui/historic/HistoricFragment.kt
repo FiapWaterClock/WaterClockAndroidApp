@@ -11,13 +11,14 @@ import androidx.fragment.app.FragmentTransaction
 import br.com.waterclockapp.R
 import br.com.waterclockapp.ui.historic.days.DaysFragment
 import br.com.waterclockapp.ui.historic.month.MonthFragment
+import br.com.waterclockapp.ui.home.HomeContract
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_historic.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HistoricFragment : Fragment() {
+class HistoricFragment(val viewHome: HomeContract.View) : Fragment(), HistoricContract.ViewHistoric {
 
     private var year: Int = 0
     private var month: Int = 0
@@ -110,8 +111,8 @@ class HistoricFragment : Fragment() {
         }
 
         when (positionTabLayout) {
-            0 -> fragment = MonthFragment(month, year)
-            1 -> fragment = DaysFragment(month, year)
+            0 -> fragment = MonthFragment(month, year, viewHome)
+            1 -> fragment = DaysFragment(month, year, viewHome)
         }
         loadFragment(fragment)
     }
@@ -142,6 +143,10 @@ class HistoricFragment : Fragment() {
             textMonth = SimpleDateFormat("MMM").format(calendar.time)
     }
 
+
+    override fun enabledNavigation(key: Boolean) {
+        viewHome.enableNavigation(key)
+    }
 
 
 

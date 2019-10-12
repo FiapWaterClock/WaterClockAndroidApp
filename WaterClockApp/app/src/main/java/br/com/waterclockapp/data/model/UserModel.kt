@@ -2,7 +2,7 @@ package br.com.waterclockapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-class UserModel(
+data class UserModel(
     @SerializedName( "id") val userId: Int,
     val firstName: String,
     val lastName: String,

@@ -15,6 +15,8 @@ class SettingsContract {
         fun logout()
 
         fun getContext() : Context?
+
+        fun enabledNavigation(key: Boolean)
     }
 
     interface Presenter {

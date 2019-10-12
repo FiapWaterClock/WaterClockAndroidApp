@@ -24,13 +24,6 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -43,11 +36,16 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.waterclockapp.R;
+import br.com.waterclockapp.ui.home.HomeContract;
 import br.com.waterclockapp.util.ConstantsKt;
 
 public class CameraFragment extends Fragment {
@@ -72,6 +71,7 @@ public class CameraFragment extends Fragment {
     private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
     private static final String CAPTURE_IMAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+    private HomeContract.View viewHome;
 
     private TextureView textureView;
     private CameraDevice cameraDevice;
@@ -89,8 +89,8 @@ public class CameraFragment extends Fragment {
         ORIENTATIONS.append(Surface.ROTATION_270,180);
     }
 
-    public CameraFragment() {
-        // Required empty public constructor
+    public CameraFragment(HomeContract.View viewHome) {
+        this.viewHome = viewHome;
     }
 
 
@@ -398,6 +398,11 @@ public class CameraFragment extends Fragment {
             Toast.makeText(getContext(), "ENVIADO", Toast.LENGTH_LONG).show();
             dialog.dismiss();
         } );
+    }
+
+
+    public void enableNavigation(Boolean key){
+        viewHome.enableNavigation(key);
     }
 
 }

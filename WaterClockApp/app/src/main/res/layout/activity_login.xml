@@ -102,7 +102,7 @@
             android:layout_height="23dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/amaranth"
-            android:text="Remember Credencias? "
+            android:text="Remember Credentials? "
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:thumbTint="@color/colorPrimaryDark"

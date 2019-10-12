@@ -27,9 +27,9 @@ interface UserApi {
             @Field("password") password: String
     ): Call<LoginModel>
 
-    @Headers(
-            "Content-Type: application/json;charset=UTF-8"
-    )
+//    @Headers(
+//            "Content-Type: application/json;charset=UTF-8"
+//    )
     @GET("api/user/email/{email}")
     fun getUserInformations(
             @Path("email") email: String,

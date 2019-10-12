@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:icon="@drawable/ic_group"
+        android:id="@+id/ic_group"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/colorPrimary"
+        android:title="Group" />
+
+    <item android:icon="@drawable/ic_clock"
+        android:id="@+id/ic_clock"
+        android:enabled="true"
+        android:iconTint="@color/colorPrimary"
+        app:showAsAction="ifRoom"
+        android:title="House" />
+    <item android:icon="@mipmap/ic_settings"
+        android:id="@+id/ic_settings"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/colorPrimary"
+        android:title="Settings" />
+</menu>

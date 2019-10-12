@@ -13,6 +13,8 @@ class HistoricContract {
         fun showProgress(show: Boolean)
 
         fun logout()
+
+        fun enabledNavigation(key: Boolean)
     }
 
     interface Presenter {
@@ -20,5 +22,9 @@ class HistoricContract {
         fun getConsumptionMonth(month:Int, year: Int)
 
         fun validateNetwork(activity: AppCompatActivity):Boolean
+    }
+
+    interface ViewHistoric{
+        fun enabledNavigation(key: Boolean)
     }
 }

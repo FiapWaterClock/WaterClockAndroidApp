@@ -2,18 +2,18 @@ package br.com.waterclockapp.ui.payment
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import br.com.waterclockapp.R
 import br.com.waterclockapp.data.model.PaymentModel
 import br.com.waterclockapp.data.model.PaymentStatus
+import br.com.waterclockapp.ui.home.HomeContract
 import kotlinx.android.synthetic.main.fragment_payment.*
 
-class PaymentFragment : Fragment() {
+class PaymentFragment(val viewHome: HomeContract.View) : Fragment() {
 
     private val payments = listOf(
             PaymentModel("10/2019", PaymentStatus.PAGO),
@@ -41,6 +41,10 @@ class PaymentFragment : Fragment() {
             adapter = PaymentAdapter(payments)
         }
 
+    }
+
+    fun enabledNavigation(key: Boolean) {
+        viewHome.enableNavigation(key)
     }
 
 

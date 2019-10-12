@@ -4,18 +4,18 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.waterclockapp.R
-import br.com.waterclockapp.data.model.DayModel
-import java.util.*
+import br.com.waterclockapp.data.model.ConsumptionModel
+import br.com.waterclockapp.util.LitersToMoney
+import org.threeten.bp.LocalDate
 
-class DayAdapter(private val days: List<DayModel>) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
+class DayAdapter(private val days: List<ConsumptionModel>, private val month: ConsumptionModel) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
 
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
-        val day: DayModel = days[position]
-        holder.bind(day)
+        val day: ConsumptionModel = days[position]
+        holder.bind(day, month)
         if(position == 0) {
             val margin: ViewGroup.MarginLayoutParams = holder.shapeCircle?.layoutParams as ViewGroup.MarginLayoutParams
             margin.setMargins(0, 50, 0, 0)
@@ -56,11 +56,12 @@ class DayAdapter(private val days: List<DayModel>) : RecyclerView.Adapter<DayAda
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(day : DayModel){
-            textViewDay?.text = "${day.date.get(Calendar.DAY_OF_MONTH)}/${day.date.get(Calendar.MONTH)}"
-            buttonValue?.text = "R$ ${day.value}"
-            buttonVolume?.text = "${day.volume} m³"
-            textViewDescription?.text = day.description
+        fun bind(day: ConsumptionModel, month: ConsumptionModel){
+            val localDate = LocalDate.parse(day.time)
+            textViewDay?.text = "${localDate.dayOfMonth}/${localDate.monthValue}"
+            buttonValue?.text = LitersToMoney.convertDayToMoney(day.litersPerMinute, month.litersPerMinute)
+            buttonVolume?.text = "${(day.litersPerMinute/1000).toString().replace(".",",")} m³"
+            textViewDescription?.text = "Consumption of the $localDate"
         }
 
 

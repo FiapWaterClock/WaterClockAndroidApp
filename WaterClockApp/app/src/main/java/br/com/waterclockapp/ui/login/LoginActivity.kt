@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.R
 import br.com.waterclockapp.domain.User
-import br.com.waterclockapp.ui.HomeActivity
+import br.com.waterclockapp.ui.home.HomeActivity
 import br.com.waterclockapp.ui.register.RegisterActivity
 import br.com.waterclockapp.util.Preferences
 import br.com.waterclockapp.util.Rebember

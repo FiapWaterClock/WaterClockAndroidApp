@@ -28,8 +28,8 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
             user.startLogin(object : BaseCallback<User> {
                 override fun onSuccessful(value: User) {
                     value.repository = user.repository
-                    //getMoreInformation(value)
-                    view.saveUserPreferences(user)
+                   // getMoreInformation(value)
+                    view.saveUserPreferences(value)
                     view.showProgressBar(false)
                 }
 

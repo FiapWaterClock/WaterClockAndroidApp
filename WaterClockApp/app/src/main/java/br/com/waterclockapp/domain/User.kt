@@ -1,13 +1,12 @@
 package br.com.waterclockapp.domain
 
-import android.os.Parcel
-import android.os.Parcelable
 import br.com.waterclockapp.data.model.RegisterModel
 import br.com.waterclockapp.data.model.UserModel
 import br.com.waterclockapp.util.*
+import java.io.Serializable
 import java.util.regex.Pattern
 
-class User() : UserContract.IUser, Parcelable {
+class User() : UserContract.IUser, Serializable {
     override var username: String? = null
     override var password: String? = null
 
@@ -15,6 +14,7 @@ class User() : UserContract.IUser, Parcelable {
     var email: String? = null
     var userId: Int? = null
     var token: String? = null
+    var isAdmin: Boolean? = null
     var name: String? = null
     var clockId: Int? = null
 
@@ -24,29 +24,20 @@ class User() : UserContract.IUser, Parcelable {
         this.password = password
     }
 
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readInt(),
-            parcel.readString()) {
-        username = parcel.readString()
-        password = parcel.readString()
-        email = parcel.readString()
-        userId = parcel.readValue(Int::class.java.classLoader) as? Int
-        token = parcel.readString()
-    }
+
 
     constructor(
             username: String,
             password: String,
             email: String,
             userId: Int,
-            token: String
+            token: String,
+            isAdmin: Boolean
     ):this(username, password) {
         this.email = email
         this.userId = userId
         this.token = token
+        this.isAdmin = isAdmin
     }
 
     constructor(
@@ -120,27 +111,7 @@ class User() : UserContract.IUser, Parcelable {
         })
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(username)
-        parcel.writeString(password)
-        parcel.writeString(email)
-        parcel.writeValue(userId)
-        parcel.writeString(token)
-    }
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<User> {
-        override fun createFromParcel(parcel: Parcel): User {
-            return User(parcel)
-        }
-
-        override fun newArray(size: Int): Array<User?> {
-            return arrayOfNulls(size)
-        }
-    }
 
     override fun createNewUser(register: RegisterModel, listener: BaseCallback<UserModel>) {
         if(repository == null) throw ValidationException("Repository nullable")

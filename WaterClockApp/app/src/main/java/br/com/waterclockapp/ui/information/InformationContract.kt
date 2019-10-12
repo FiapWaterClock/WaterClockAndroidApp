@@ -12,6 +12,8 @@ class InformationContract{
         fun showProgressRecycler(show: Boolean)
 
         fun logout()
+
+        fun enabledNavigation(key: Boolean)
     }
 
     interface Presenter {

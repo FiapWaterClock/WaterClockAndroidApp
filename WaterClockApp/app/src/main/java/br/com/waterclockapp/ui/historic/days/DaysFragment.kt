@@ -1,8 +1,6 @@
 package br.com.waterclockapp.ui.historic.days
 
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,36 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.waterclockapp.R
 import br.com.waterclockapp.data.model.ConsumptionModel
-import br.com.waterclockapp.data.model.DayModel
 import br.com.waterclockapp.ui.historic.HistoricContract
 import br.com.waterclockapp.ui.historic.HistoricPresenter
+import br.com.waterclockapp.ui.home.HomeContract
 import br.com.waterclockapp.ui.login.LoginActivity
 import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_days.*
-import java.util.*
 
-class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract.View {
+class DaysFragment(var month: Int, var year: Int, val viewHome: HomeContract.View) : Fragment(), HistoricContract.View {
 
 
     private lateinit var presenter: HistoricContract.Presenter
     private var shortAnimTime:Int = 0
 
-    private val days = listOf(
-            DayModel(10.2 ,20.34, GregorianCalendar(2019, 10, 10), "Teste de descricao"),
-            DayModel(11.2 ,30.34, GregorianCalendar(2019, 10, 11), "Teste de descricao"),
-            DayModel(12.2 ,40.34, GregorianCalendar(2019, 10, 12), "Teste de descricao"),
-            DayModel(13.2 ,50.34, GregorianCalendar(2019, 10, 13), "Teste de descricao"),
-            DayModel(14.2 ,60.0, GregorianCalendar(2019, 10, 14), "Teste de descricao"),
-            DayModel(15.2 ,23.34, GregorianCalendar(2019, 10, 15), "Teste de descricao"),
-            DayModel(16.2 ,28.34, GregorianCalendar(2019, 10, 16), "Teste de descricao"),
-            DayModel(17.2 ,10.34, GregorianCalendar(2019, 10, 17), "Teste de descricao"),
-            DayModel(18.2 ,0.44, GregorianCalendar(2019, 10, 18), "Teste de descricao"),
-            DayModel(18.2 ,77.44, GregorianCalendar(2019, 10, 19), "Teste de descricao"),
-            DayModel(18.2 ,54.44, GregorianCalendar(2019, 10, 20), "Teste de descricao"),
-            DayModel(18.2 ,23.44, GregorianCalendar(2019, 10, 21), "Teste de descricao"),
-            DayModel(18.2 ,7.44, GregorianCalendar(2019, 10, 22), "Teste de descricao"),
-            DayModel(18.2 ,56.44, GregorianCalendar(2019, 10, 23), "Teste de descricao")
-    )
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -69,24 +50,30 @@ class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun initInformations(models: ConsumptionModel, month: List<ConsumptionModel>) {
-        recyclerViewDays.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = DayAdapter(days)
+    override fun initInformations(month: ConsumptionModel, days: List<ConsumptionModel>) {
+        if(days.isEmpty()) View.INVISIBLE
+        else{
+            View.VISIBLE
+            recyclerViewDays.apply {
+                layoutManager = LinearLayoutManager(activity)
+                adapter = DayAdapter(days, month)
+            }
         }
+
     }
 
     override fun showProgress(show: Boolean) {
         swipeRefreshLayoutDays.isRefreshing = show
-
+        enabledNavigation(show)
         constraintLayoutDay.visibility = if(show) View.INVISIBLE else View.VISIBLE
-        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
-        swipeRefreshLayoutDays.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
-                .setListener( object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
-                    }
-                })
+//        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
+//
+//        swipeRefreshLayoutDays.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
+//                .setListener( object : AnimatorListenerAdapter() {
+//                    override fun onAnimationEnd(animation: Animator?) {
+//                        swipeRefreshLayoutDays.visibility = if(show) View.VISIBLE else View.GONE
+//                    }
+//                })
     }
 
     override fun logout() {
@@ -94,6 +81,11 @@ class DaysFragment(var month: Int, var year: Int) : Fragment(), HistoricContract
         Preferences.clearPreferences()
         startActivity(intentHome)
         activity?.finish()
+    }
+
+
+    override fun enabledNavigation(key: Boolean){
+        viewHome.enableNavigation(key)
     }
 
 

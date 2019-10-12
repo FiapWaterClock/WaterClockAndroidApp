@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.waterclockapp.R
 import br.com.waterclockapp.data.model.ClockModel
 import br.com.waterclockapp.data.model.UserModel
+import br.com.waterclockapp.ui.home.HomeContract
 import br.com.waterclockapp.ui.login.LoginActivity
 import br.com.waterclockapp.util.CLEAR_SUCCESS_PREFERENCES
 import br.com.waterclockapp.util.DELETE_USER
@@ -24,7 +25,7 @@ import br.com.waterclockapp.util.DIALOG_MESSAGE_CLEAN_SETTINGS
 import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : Fragment(), SettingsContract.View{
+class SettingsFragment(val viewHome: HomeContract.View) : Fragment(), SettingsContract.View{
 
 
     private lateinit var presenter: SettingsContract.Presenter
@@ -132,6 +133,7 @@ class SettingsFragment : Fragment(), SettingsContract.View{
 
     override fun showProgressRecycler(show: Boolean) {
         constraintLayoutSettings.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        enabledNavigation(show)
         progressBarSettings.visibility = if(show) View.VISIBLE else View.GONE
         progressBarSettings.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
                 .setListener( object : AnimatorListenerAdapter() {
@@ -152,7 +154,9 @@ class SettingsFragment : Fragment(), SettingsContract.View{
         return super.getContext()
     }
 
-
+    override fun enabledNavigation(key: Boolean) {
+        viewHome.enableNavigation(key)
+    }
 
 
 

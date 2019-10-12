@@ -16,6 +16,7 @@ import br.com.waterclockapp.data.model.ConsumptionModel
 import br.com.waterclockapp.data.model.DayModel
 import br.com.waterclockapp.ui.historic.HistoricContract
 import br.com.waterclockapp.ui.historic.HistoricPresenter
+import br.com.waterclockapp.ui.home.HomeContract
 import br.com.waterclockapp.ui.login.LoginActivity
 import br.com.waterclockapp.util.LitersToMoney
 import br.com.waterclockapp.util.Preferences
@@ -28,7 +29,7 @@ import org.threeten.bp.LocalDate
 import java.util.*
 
 
-class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContract.View {
+class MonthFragment(var month: Int, var year: Int, val viewHome: HomeContract.View) : Fragment(), HistoricContract.View {
 
     private lateinit var presenter: HistoricContract.Presenter
     private var shortAnimTime:Int = 0
@@ -70,8 +71,13 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
     }
 
     private fun startGraph(consumptionList: List<ConsumptionModel>) {
-
-
+        if(consumptionList.isEmpty()) {
+            constraintLayoutGraphy.visibility = View.INVISIBLE
+            textViewVolumeDayGraphy.text = ""
+            textViewValueDayGaphy.text = ""
+            return
+        }
+        constraintLayoutGraphy.visibility = View.VISIBLE
         for (i in (consumptionList.indices)){
             val localDate = LocalDate.parse(consumptionList[i].time)
             val element = AxisValue(i.toFloat()).setLabel(localDate.dayOfMonth.toString())
@@ -144,12 +150,14 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
         monthConsumption = consumptionMonth
         textViewValueAllMonthDay.text = "${(consumptionMonth.litersPerMinute/1000).toString().replace(".",",")} m³"
         textViewVolumeAllMonthDay.text = LitersToMoney.convertLitersToMoney(consumptionMonth.litersPerMinute)
+        startGraph(month)
 
     }
 
     override fun showProgress(show: Boolean) {
         constraintLayoutGraphy.visibility = if(show) View.INVISIBLE else View.VISIBLE
         constraintLayoutMonthValues.visibility = if(show) View.INVISIBLE else View.VISIBLE
+        enabledNavigation(show)
         progressBarMonth.visibility = if(show) View.VISIBLE else View.GONE
         progressBarMonth.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
                 .setListener( object : AnimatorListenerAdapter() {
@@ -165,5 +173,9 @@ class MonthFragment(var month: Int, var year: Int) : Fragment(), HistoricContrac
         startActivity(intentHome)
         activity?.finish()    }
 
+
+    override fun enabledNavigation(key: Boolean){
+        viewHome.enableNavigation(key)
+    }
 
 }

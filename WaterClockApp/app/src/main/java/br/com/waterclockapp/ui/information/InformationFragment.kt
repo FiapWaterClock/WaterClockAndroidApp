@@ -13,13 +13,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.waterclockapp.R
 import br.com.waterclockapp.data.model.ConsumptionModel
+import br.com.waterclockapp.ui.home.HomeContract
 import br.com.waterclockapp.ui.login.LoginActivity
 import br.com.waterclockapp.util.LitersToMoney
 import br.com.waterclockapp.util.Preferences
 import kotlinx.android.synthetic.main.fragment_information.*
 import java.util.*
 
-class InformationFragment : Fragment(), InformationContract.View {
+class InformationFragment(val viewHome: HomeContract.View) : Fragment(), InformationContract.View {
 
 
     lateinit var presenter: InformationContract.Presenter
@@ -59,6 +60,7 @@ class InformationFragment : Fragment(), InformationContract.View {
         constraintLayoutValueMensal.visibility = if(show) View.INVISIBLE else View.VISIBLE
         constraintLayoutValueDiario.visibility = if(show) View.INVISIBLE else View.VISIBLE
         progressBarInformation.visibility = if(show) View.VISIBLE else View.GONE
+        enabledNavigation(show)
         progressBarInformation.animate().setDuration(shortAnimTime.toLong()).alpha(if(show) 1F else 0F)
                 .setListener( object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {
@@ -72,6 +74,10 @@ class InformationFragment : Fragment(), InformationContract.View {
         Preferences.clearPreferences()
         startActivity(intentHome)
         activity?.finish()
+    }
+
+    override fun enabledNavigation(key: Boolean) {
+        viewHome.enableNavigation(key)
     }
 
 
