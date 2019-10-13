@@ -23,7 +23,7 @@ class ConsumptionRepository : ConsumptionContract.IRepository {
                         if(response.body() == null) return onResult.onUnsuccessful("Lista Vazia")
                         if(!response.isSuccessful) return onResult.onUnsuccessful(response.message())
                         response.body()?.let {
-                            onResult.onSuccessful(it)
+                            onResult.onSuccessful(it.sortedWith(compareBy({ it.time }, { it.litersPerMinute })))
                         }
                     }
 
