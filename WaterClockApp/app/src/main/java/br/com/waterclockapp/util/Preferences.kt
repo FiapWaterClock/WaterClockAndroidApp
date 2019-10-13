@@ -27,10 +27,10 @@ object Preferences {
                 .putString(USERNAME, user.username)
                 .putString(PASSWORD, user.password)
                 .putString(EMAIL, user.email)
-                .putInt(USERID, user.userId ?: 0)
+                .putInt(USERID, user.userId ?: 36)
                 .putString(TOKEN, user.token)
                     .putString(NAME, user.name)
-                    .putInt(CLOCK, user.clockId?: 0)
+                    .putInt(CLOCK, user.clockId?: 8)
                 .apply()
         }
 

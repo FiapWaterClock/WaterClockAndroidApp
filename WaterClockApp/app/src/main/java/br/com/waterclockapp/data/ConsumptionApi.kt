@@ -1,6 +1,7 @@
 package br.com.waterclockapp.data
 
 import br.com.waterclockapp.data.model.ConsumptionModel
+import br.com.waterclockapp.data.model.RateModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -33,6 +34,16 @@ interface ConsumptionApi {
             @Path("month") month: Int,
             @Path("year") year: Int,
             @Header("Authorization") token: String): Call<ConsumptionModel>
+
+    @Headers(
+            "Content-Type: application/json;charset=UTF-8"
+    )
+    @GET("api/consumption/price/clock/{clock_id}/month/{month}/year/{year}")
+    fun getRateAll(
+            @Path("clock_id") clockId: Int,
+            @Path("month") month: Int,
+            @Path("year") year: Int,
+            @Header("Authorization") token: String): Call<RateModel>
 
 
     companion object {

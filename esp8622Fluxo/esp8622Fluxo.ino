@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <PubSubClient.h>
@@ -12,7 +14,7 @@
 #define PUBLISH_TOPIC "fiap/waterclock/sensor/flow"
 #define TIMEOUT 5000 //milliseconds - conection timeout
 #define REFRESH 1000 //milliseconds - refresh rate for the led and sensors data
-#define ID 100
+#define ID 8
 
 WiFiServer server(80);
 

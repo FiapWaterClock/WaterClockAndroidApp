@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import br.com.waterclockapp.data.model.ConsumptionModel
+import br.com.waterclockapp.data.model.RateModel
 import br.com.waterclockapp.data.repository.ConsumptionRepository
 import br.com.waterclockapp.domain.Consumption
 import br.com.waterclockapp.util.BaseCallback
@@ -40,14 +41,33 @@ class InformationPresenter(val view: InformationContract.View) : InformationCont
     private fun getConsumptionDay(consumption: Consumption, month: ConsumptionModel) {
         consumption.getConsumptionMonth(object : BaseCallback<List<ConsumptionModel>>{
             override fun onSuccessful(value: List<ConsumptionModel>) {
-                if(value.isEmpty()) return view.initView(month, month)
-                view.initView(month, value[value.size - 1])
+                if(value.isEmpty()) getPrice(consumption, month, ConsumptionModel(0,"", 0.0))
+                getPrice(consumption, month, value[value.size - 1])
+                //view.initView(month, value[value.size - 1])
+                //view.showProgressRecycler(false)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                view.notification(error)
+                getPrice(consumption, month, ConsumptionModel(0,"", 0.0))
+                //view.initView(month, ConsumptionModel(0,"", 0.0))
+                //view.showProgressRecycler(false)
+            }
+
+        })
+    }
+
+    private fun getPrice(consumption: Consumption, month: ConsumptionModel, day: ConsumptionModel) {
+        consumption.getConsumptionPriceAllMonth(object : BaseCallback<RateModel>{
+            override fun onSuccessful(value: RateModel) {
+                if(value == null ) return view.initView(month, month, value)
+                view.initView(month, day, value)
                 view.showProgressRecycler(false)
             }
 
             override fun onUnsuccessful(error: String) {
                 view.notification(error)
-                view.initView(month, ConsumptionModel(0,"", 0.0))
+                view.initView(month, ConsumptionModel(0,"", 0.0), RateModel(0.0,"", 0.0,0.0))
                 view.showProgressRecycler(false)
             }
 
