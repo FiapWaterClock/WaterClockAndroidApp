@@ -1,45 +1,56 @@
 package br.com.waterclockapp.domain
 
-import android.os.Parcel
-import android.os.Parcelable
+import br.com.waterclockapp.data.model.RegisterModel
+import br.com.waterclockapp.data.model.UserModel
 import br.com.waterclockapp.util.*
+import java.io.Serializable
 import java.util.regex.Pattern
 
-class User(override var username: String, override var password: String) : UserContract.IUser, Parcelable {
-
+class User() : UserContract.IUser, Serializable {
+    override var username: String? = null
+    override var password: String? = null
 
     var repository: UserContract.IRepository? = null
-
-    var name: String? = null
+    var email: String? = null
     var userId: Int? = null
     var token: String? = null
+    var isAdmin: Boolean? = null
+    var name: String? = null
+    var clockId: Int? = null
 
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readInt(),
-            parcel.readString()) {
-        username = parcel.readString()
-        password = parcel.readString()
-        name = parcel.readString()
-        userId = parcel.readValue(Int::class.java.classLoader) as? Int
-        token = parcel.readString()
+
+    constructor(username: String, password: String):this(){
+        this.username = username
+        this.password = password
     }
+
+
 
     constructor(
             username: String,
             password: String,
-            name: String,
+            email: String,
             userId: Int,
-            token: String
+            token: String,
+            isAdmin: Boolean
     ):this(username, password) {
-        this.name = name
+        this.email = email
         this.userId = userId
         this.token = token
+        this.isAdmin = isAdmin
     }
 
-    override fun isValidEmpty(): Boolean = (username.isEmpty() || password.isEmpty())
+    constructor(
+            userId: Int,
+            name: String,
+            clockId: Int
+    ):this(){
+        this.userId = userId
+        this.name = name
+        this.clockId = clockId
+    }
+
+    override fun isValidEmpty(): Boolean = ((username ?: "").isEmpty() || (password ?: "").isEmpty())
 
     override fun validationPassword():Boolean{
         val pattern = Pattern.compile(PASSWORD_PATTERN)
@@ -49,7 +60,7 @@ class User(override var username: String, override var password: String) : UserC
 
     override fun validationCpf():Boolean {
         val pattern = Pattern.compile(CPF_PATTERN)
-        val matcher = pattern.matcher(replaceChars(username))
+        val matcher = pattern.matcher(replaceChars(username ?: "") )
         return matcher.matches()
     }
 
@@ -60,7 +71,7 @@ class User(override var username: String, override var password: String) : UserC
                 .replace("*", "")
     }
 
-    override fun validationEmail():Boolean = Formation.emailFormat(username)
+    override fun validationEmail():Boolean = Formation.emailFormat(username ?: "")
 
     override fun startLogin(listener: BaseCallback<User>) {
 
@@ -68,12 +79,12 @@ class User(override var username: String, override var password: String) : UserC
 
         if(isValidEmpty()) throw ValidationException("User or Password is empty")
 
-        if(!(validationCpf() || validationEmail()))
+        if(!validationEmail())
             throw ValidationException("User field must be a email or CPF format")
 
-        if(!validationPassword()) throw ValidationException("Password format is incorrect")
+        //if(!validationPassword()) throw ValidationException("Password format is incorrect")
 
-        repository?.startLogin(username, password, object : BaseCallback<User>{
+        repository?.startLogin(username ?: "", password ?: "", object : BaseCallback<User>{
             override fun onSuccessful(value: User) {
                 listener.onSuccessful(value)
             }
@@ -84,25 +95,55 @@ class User(override var username: String, override var password: String) : UserC
         })
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(username)
-        parcel.writeString(password)
-        parcel.writeString(name)
-        parcel.writeValue(userId)
-        parcel.writeString(token)
+    override fun getUserInformation(listener: BaseCallback<UserModel>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        //if(email == null) throw ValidationException("User not found")
+        if(token == null) throw ValidationException("Token not found")
+        repository?.getUserInformation(email ?: "", token?: "", object : BaseCallback<UserModel>{
+            override fun onSuccessful(value: UserModel) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
     }
 
-    override fun describeContents(): Int {
-        return 0
+
+
+    override fun createNewUser(register: RegisterModel, listener: BaseCallback<UserModel>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        if(register.email.isEmpty() || register.firstName.isEmpty() || register.lastName.isEmpty()
+                || register.password.isEmpty() || register.matchingPassword.isEmpty())
+            throw ValidationException("Fill in all values")
+
+        repository?.createNewUser(register, object : BaseCallback<UserModel>{
+            override fun onSuccessful(value: UserModel) {
+                listener.onSuccessful(value)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
     }
 
-    companion object CREATOR : Parcelable.Creator<User> {
-        override fun createFromParcel(parcel: Parcel): User {
-            return User(parcel)
-        }
+    override fun deleteUser(listener: BaseCallback<Void>) {
+        if(repository == null) throw ValidationException("Repository nullable")
+        userId = 1
+        if(userId == 0) throw ValidationException("Repository nullable")
+        repository?.deleteUser(userId!!, object : BaseCallback<Void>{
+            override fun onSuccessful(value: Void) {
+                listener.onSuccessful(value)
+            }
 
-        override fun newArray(size: Int): Array<User?> {
-            return arrayOfNulls(size)
-        }
+            override fun onUnsuccessful(error: String) {
+                listener.onUnsuccessful(error)
+            }
+
+        })
     }
 }

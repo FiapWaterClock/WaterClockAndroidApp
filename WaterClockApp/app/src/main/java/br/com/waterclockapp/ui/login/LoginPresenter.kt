@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import br.com.waterclockapp.data.model.UserModel
 import br.com.waterclockapp.data.repository.UserRepository
 import br.com.waterclockapp.domain.User
 import br.com.waterclockapp.util.BaseCallback
@@ -26,6 +27,8 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
             view.showProgressBar(true)
             user.startLogin(object : BaseCallback<User> {
                 override fun onSuccessful(value: User) {
+                    value.repository = user.repository
+                   // getMoreInformation(value)
                     view.saveUserPreferences(value)
                     view.showProgressBar(false)
                 }
@@ -42,6 +45,24 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
         }catch(e:NotConnectionNetwork) {
             view.showSnack(CONNECTION_INTERNTET_ERROR)
         }
+    }
+
+    private fun getMoreInformation(user: User){
+        user.getUserInformation(object : BaseCallback<UserModel>{
+            override fun onSuccessful(value: UserModel) {
+                user.userId = value.userId
+                if(value.clock.isNotEmpty()) user.clockId = value.clock[0].clockId
+                user.name = value.firstName
+                view.saveUserPreferences(user)
+                view.showProgressBar(false)
+            }
+
+            override fun onUnsuccessful(error: String) {
+                view.notification(error)
+                view.showProgressBar(false)
+            }
+
+        })
     }
 
     private fun verifyNetwork(activity: AppCompatActivity){

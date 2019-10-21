@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+
+    android:minHeight="150dp">
+
+    <TextView
+        android:id="@+id/buttonValueHistoric"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/around_value_day"
+        android:lines="1"
+        android:maxWidth="100dp"
+        android:padding="7dp"
+        android:text="R$ 4,693"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/shape_circle"
+        app:layout_constraintEnd_toStartOf="@+id/buttonVolumeHistoric"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/shape_circle"
+        app:layout_constraintTop_toTopOf="@+id/shape_circle" />
+
+    <TextView
+        android:id="@+id/buttonVolumeHistoric"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/around_volume_day"
+        android:lines="1"
+        android:maxWidth="100dp"
+        android:padding="7dp"
+        android:text="30 m³"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonValueHistoric"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonValueHistoric"
+        app:layout_constraintTop_toTopOf="@+id/buttonValueHistoric" />
+
+    <TextView
+        android:id="@+id/textViewDateHistoric"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/amaranth"
+        android:text="05/10"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shape_circle"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <TextView
+        android:id="@+id/textViewDescriptionHistoric"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Consumo avaliado para normal"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/buttonVolumeHistoric"
+        app:layout_constraintStart_toStartOf="@+id/buttonValueHistoric"
+        app:layout_constraintTop_toBottomOf="@+id/buttonValueHistoric"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/shape_circle"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/around_cicle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/textViewDateHistoric"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/shape_line"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/shape_circle"
+        app:layout_constraintStart_toStartOf="@+id/shape_circle"
+        app:layout_constraintTop_toBottomOf="@+id/shape_circle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

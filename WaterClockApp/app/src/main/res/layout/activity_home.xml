@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".ui.HomeActivity">
+    tools:context=".ui.home.HomeActivity">
 
     <FrameLayout
         android:id="@+id/frameHome"
@@ -24,6 +24,17 @@
         android:layout_width="match_parent"
         android:background="@color/colorWhite"
         app:menu="@menu/menu_bottom_navigation"
+        android:layout_height="86dp"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationViewHomeAdmin"
+        android:layout_width="match_parent"
+        android:background="@color/colorWhite"
+        app:menu="@menu/menu_bottom_navigation_admin"
         android:layout_height="86dp"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 #include <ESP8266WiFi.h>
 #include <DNSServer.h>
 #include <PubSubClient.h>
@@ -9,10 +11,10 @@
 #define PORT 16925
 #define HOSTUSER "inkphijn"
 #define HOSTPASSWORD "F1QexKFsttXE"
-#define PUBLISH_TOPIC "fiap/waterclock/iot/devtype/nodemcu/id/23/sensor"
+#define PUBLISH_TOPIC "fiap/waterclock/sensor/flow"
 #define TIMEOUT 5000 //milliseconds - conection timeout
 #define REFRESH 1000 //milliseconds - refresh rate for the led and sensors data
-#define ID 100
+#define ID 8
 
 WiFiServer server(80);
 
@@ -36,6 +38,7 @@ void setup() {
   //wifiManager.resetSettings();
 
   wifiManager.autoConnect("AutoConnectAP");
+  wifiManager.setMinimumSignalQuality(4);
   Serial.println("Connected.");
 
   mqtt.setServer(HOST, PORT);
@@ -78,13 +81,11 @@ void enviarMqttResponse(){
           char texto[200];
           StaticJsonBuffer<200> jsonBuffer;
           JsonObject& json = jsonBuffer.createObject();
-          json["id"] = ID;
-          //String ip = String(WiFi.localIP())+" ";
-          //json["ip"] = ip;
+          json["clockId"] = ID;
           if (!isnan(fluxoAcumulado)) {
             
             fluxoAcumulado = fluxoAcumulado/contador;
-            json["fluxoAcumulado"] = fluxoAcumulado;
+            json["litersPerMinute"] = fluxoAcumulado;
             contador = 0;
             fluxoAcumulado = 0;
 

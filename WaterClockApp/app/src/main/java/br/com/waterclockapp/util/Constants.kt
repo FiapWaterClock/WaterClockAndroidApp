@@ -11,10 +11,20 @@ const val TOKEN = "token"
 const val REMEMBER = "remember"
 const val NAME_PREFS = "user_preferences"
 const val USERID = "user_id"
-const val NAME = "name"
+const val NAME = "firstName"
+const val EMAIL = "email"
+const val CLOCK = "clock_id"
 
 const val USER_ACCOUNT:String ="USER_ACCOUNT"
 
 const val DIALOG_MESSAGE_CLEAN_SETTINGS = "Deseja realmente limpar as credenciais salvas?";
 
+const val DIALOG_SEND_IMAGE = "Deseja realmente enviar essa imagem?"
+
 const val CONNECTION_INTERNTET_ERROR = "Internet sem conexão"
+
+const val CLEAR_SUCCESS_PREFERENCES = "Preferências limpas"
+
+const val DELETE_USER = "Deseja realmente deletar esse usuário?"
+
+const val DELETE_SUCCESS_USER = "Usuario deletado com sucesso"

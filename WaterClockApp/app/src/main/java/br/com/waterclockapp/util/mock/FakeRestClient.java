@@ -31,7 +31,7 @@ public class FakeRestClient {
     }
 
     /**
-     * @return
+     * @returne
      */
     private static OkHttpClient.Builder httpClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
